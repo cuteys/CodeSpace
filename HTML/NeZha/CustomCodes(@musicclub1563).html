@@ -1,498 +1,618 @@
+<!-- ！！！仅支持 ServerStatus 主题！！！ -->
 <!-- 原作者：https://t.me/musicclub1563 -->
 <!-- 在此感谢原作者 -->
-<!-- 使用说明：填入哪吒监控后台设置中的自定义代码 -->
-<!-- 个性化设置：(1) Logo 的 URL （2）背景的 URL （3）设备的购买、到期时间、价格、官网地址 -->
-<!-- 二次修改：https://t.me/cuteysking -->
-<!-- 修改说明：修复黑暗模式下部分图标颜色异常，增加半成品模糊效果 -->
-<!-- 已知错误：导航栏下拉框无模糊效果，原因是 ".navbar" 元素与 ".navbar .dropdown-menu" 元素模糊效果冲突，本人能力不足暂时无法修改；右下角按钮背景也暂无模糊效果 -->
+<!-- 个性化设置：(1)Logo的URL  （2）背景的URL  (3)设备的购买、到期时间、价格、官网地址 -->
+<!-- 重构：https://t.me/cuteysking -->
+<!-- 重构说明：增加半成品模糊效果，增加按钮特效，精简代码，优化若干细节，修复若干 Bug -->
+<!-- 已知错误：导航栏下拉框无模糊效果，原因为".navbar"元素与".navbar .dropdown-menu"元素模糊效果冲突，本人能力不足暂时无法修改 -->
+<script>
+  // 更改首页logo，在""中填入你的Logo URL
+  window.addEventListener("DOMContentLoaded", (event) => {
+    var logo = document.querySelector(".navbar-brand img");
+    if (logo) {
+      logo.src = ""; // 将此处的 URL 替换为你的Logo URL
+    }
+  });
+</script>
+<style>
+  /* 强制隐藏指定的导航菜单、页脚文本以及图像元素 */
+  .right.menu > a,  /* 隐藏右侧菜单中的链接 */
+.footer .is-size-7,  /* 隐藏页脚的小字号文本 */
+.item img {
+    /* 隐藏 item 中的图像 */
+    display: none !important; /* 使用 !important 确保样式生效 */
+  }
+
+  /* 设置全局背景图片和字体 */
+  body {
+    background: url(https://api.miaomc.cn/image/get) center center no-repeat
+      fixed !important; /* 背景图固定在页面中央 */
+    background-size: cover !important; /* 背景图覆盖整个页面 */
+    min-height: 100vh; /* 保证背景图至少覆盖整个视口高度 */
+    margin: 0; /* 移除 body 的默认外边距 */
+    padding: 0; /* 移除 body 的默认内边距 */
+    font-family: Arial, Helvetica, sans-serif !important; /* 设置全局字体 */
+  }
+
+  /* 针对宽度小于 1499px 的设备进行样式调整 */
+  @media (max-width: 1499px) {
+    .countdown .time {
+      display: none !important; /* 隐藏倒计时中的小时、分钟和秒 */
+    }
+    .countdown .days {
+      text-align: center !important; /* 天数文字居中 */
+      width: 100% !important; /* 使天数占据全部宽度 */
+    }
+  }
+
+  /* 针对超大屏幕（宽度 >= 1200px）调整容器宽度 */
+  @media (min-width: 1200px) {
+    .ui.container {
+      width: 90% !important; /* 容器宽度调整为 90% */
+    }
+  }
+
+  /* 针对平板设备（宽度在 768px 到 1199px 之间）适配 */
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .ui.container {
+      width: 95% !important; /* 容器宽度调整为 95% */
+    }
+
+    body {
+      background-position: top center !important; /* 背景在平板设备上居中显示 */
+    }
+
+    .countdown {
+      font-size: 0.9em !important; /* 倒计时字体缩小 */
+    }
+  }
+
+  /* 针对宽度小于 768px 的设备进行样式调整 */
+  @media (max-width: 767px) {
+    .ui.container {
+      width: 100% !important; /* 容器宽度调整为 100% */
+      padding: 0 15px !important; /* 增加左右内边距 */
+    }
+
+    body {
+      background-position: center center !important; /* 背景在手机设备上居中显示 */
+      background-size: cover !important; /* 确保背景图覆盖整个视口 */
+    }
+
+    .countdown .time {
+      display: inline !important; /* 显示倒计时中的小时、分钟和秒 */
+    }
+
+    .countdown .days {
+      text-align: left !important; /* 天数左对齐 */
+      width: auto !important; /* 取消天数的全宽显示 */
+    }
+
+    .countdown {
+      font-size: 1em !important; /* 恢复倒计时字体大小 */
+    }
+
+    /* 调整卡片内容的标题位置 */
+    .ui.card > .content > .header:not(.ui),
+    .ui.cards > .card > .content > .header:not(.ui) {
+      margin-top: 0.4em !important; /* 增加标题上方间距 */
+    }
+  }
+
+  /* 针对超小屏幕（宽度小于 480px）进行样式调整 */
+  @media (max-width: 480px) {
+    .ui.container {
+      width: 100% !important; /* 容器宽度调整为 100% */
+      padding: 0 10px !important; /* 缩小内边距 */
+    }
+
+    body {
+      background-position: center center !important; /* 背景居中显示 */
+      background-size: cover !important; /* 确保背景始终覆盖全屏 */
+    }
+
+    /* 调整超小屏幕下卡片标题的字体大小 */
+    .ui.card > .content > .header:not(.ui),
+    .ui.cards > .card > .content > .header:not(.ui) {
+      font-size: 1.2em !important; /* 缩小标题字体 */
+    }
+  }
+
+  /* 登录按钮样式 */
+  .nezha-primary-btn {
+    background-color: transparent !important; /* 透明背景 */
+    color: #000 !important; /* 黑色文字 */
+  }
+
+  /* 大卡片样式 */
+  #app .ui.fluid.accordion {
+    background-color: #fbfbfb26 !important; /* 半透明背景 */
+    border-radius: 0.4rem !important; /* 圆角 */
+  }
+
+  /* 小卡片样式 */
+  .ui.four.cards > .card {
+    border-radius: 0.6rem !important; /* 增加圆角 */
+    background-color: #fafafaa3 !important; /* 半透明背景 */
+  }
+
+  /* 进度条样式 */
+  .ui.progress {
+    border-radius: 50rem !important; /* 圆形进度条 */
+  }
+  .ui.progress .bar {
+    min-width: 1.8em !important; /* 设置最小宽度 */
+    border-radius: 15px !important; /* 进度条边角圆滑 */
+    line-height: 1.65em !important; /* 进度条的行高 */
+    color: black; /* 进度条文字颜色 */
+  }
+  .ui.progress > .bar {
+    background-color: #000 !important; /* 进度条背景颜色 */
+  }
+
+  /* 弹出卡片样式 */
+  .ui.right.center.popup {
+    margin: -3px 0 0 0.914286em !important; /* 调整弹出框的边距 */
+    -webkit-transform-origin: left 50% !important; /* 设置弹出框的动画原点 */
+    transform-origin: left 50% !important; /* 保持一致的动画原点 */
+  }
+
+  /* ！！！！！！！明亮模式！！！！！！！ */
+
+  /* 明亮模式的全局样式设置 */
+  body[theme="light"] {
+    margin: 0; /* 清除默认外边距 */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* 设置优雅的字体系列 */
+    background: rgba(255, 255, 255, 0.25); /* 背景色为半透明白色 */
+    color: #333; /* 文字颜色设置为深灰色 */
+    position: relative; /* 设置相对定位 */
+    overflow-x: hidden; /* 隐藏横向溢出的内容 */
+  }
+
+  /* 明亮模式下的导航栏样式 */
+  body[theme="light"] .navbar {
+    background-color: rgba(255, 255, 255, 0.25); /* 半透明背景色 */
+    backdrop-filter: blur(2px); /* 模糊背景效果，提升视觉层次 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    box-shadow: rgba(0, 0, 0, 0.25) 0 2px 5px; /* 添加阴影效果，增强立体感 */
+    border: none; /* 移除边框 */
+  }
+
+  /* 明亮模式下的下拉菜单样式 */
+  body[theme="light"] .navbar .dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.3); /* 半透明背景色 */
+    backdrop-filter: blur(2px); /* 背景模糊效果 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
+  }
+
+  /* 明亮模式导航栏按钮样式 */
+  body[theme="light"] .navbar-nav > li > a,
+  body[theme="light"] .dropdown-menu li a {
+    border-radius: 5px; /* 圆角效果，提升美观 */
+    color: rgba(10, 10, 10, 0.8); /* 设置按钮文字颜色 */
+  }
+
+  /* 明亮模式导航栏按钮悬停效果 */
+  body[theme="light"] .navbar-nav > li > a:hover,
+  body[theme="light"] .dropdown-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* 悬停时背景色变为半透明白色 */
+    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
+    color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
+  }
+
+  /* 明亮模式下表格的透明背景 */
+  body[theme="light"] .table,
+  body[theme="light"] .table > thead > tr,
+  body[theme="light"] .table > thead > tr > th,
+  body[theme="light"] .table > tbody > tr,
+  body[theme="light"] .table > tbody > tr > td,
+  body[theme="light"] .table-condensed > tbody > tr,
+  body[theme="light"] .table-hover > tbody > tr,
+  body[theme="light"] .table-hover > tbody > tr:hover,
+  body[theme="light"] .table-striped tbody > tr.even,
+  body[theme="light"] .table-striped tbody > tr.odd,
+  body[theme="light"] .table-striped tbody > tr.even > td,
+  body[theme="light"] .table-striped tbody > tr.even > th,
+  body[theme="light"] .table-striped tbody > tr.odd > td,
+  body[theme="light"] .table-striped tbody > tr.odd > th,
+  body[theme="light"] .table-striped tbody > tr.even > td:hover,
+  body[theme="light"] .table-striped tbody > tr.even > th:hover,
+  body[theme="light"] .table-striped tbody > tr.odd > td:hover,
+  body[theme="light"] .table-striped tbody > tr.odd > th:hover,
+  body[theme="light"] .table-striped tbody > tr.expandRow:hover {
+    background-color: transparent !important; /* 确保表格背景透明，展示下层内容 */
+  }
+
+  /* 明亮模式下的内容区域透明背景 */
+  body[theme="light"] .content {
+    background-color: rgba(255, 255, 255, 0.25); /* 设置半透明背景色 */
+    backdrop-filter: blur(2px); /* 模糊背景效果，提升视觉效果 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    box-shadow: rgba(0, 0, 0, 0.25) 0 0.625em 2em; /* 添加阴影，提升层次感 */
+    border: none; /* 移除边框 */
+  }
+
+  /* 明亮模式下进度条样式 */
+  body[theme="light"] .progress {
+    background-image: none; /* 移除背景图 */
+    background-color: rgba(0, 0, 0, 0.06); /* 设置背景颜色，降低透明度 */
+  }
+
+  /* 明亮模式下工具箱按钮样式 */
+  body[theme="light"] .toolbox span {
+    backdrop-filter: blur(2px); /* 模糊效果，提升视觉效果 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    border-radius: 5px; /* 设置圆角效果 */
+  }
+
+  /* 明亮模式下工具按钮图标样式 */
+  body[theme="light"] .toolbox span i {
+    background-color: rgba(255, 255, 255, 0.25); /* 设置半透明背景 */
+    color: rgba(10, 10, 10, 0.8); /* 图标颜色为黑色 */
+    font-size: 24px; /* 设置图标大小 */
+  }
+
+  /* 明亮模式下工具按钮悬停效果 */
+  body[theme="light"] .toolbox span:hover {
+    background-color: rgba(
+      255,
+      255,
+      255,
+      0.2
+    ); /* 悬停时背景颜色变为半透明白色 */
+    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
+  }
+
+  body[theme="light"] .toolbox span:hover i {
+    color: rgb(73, 146, 255); /* 悬停时图标颜色变为蓝色 */
+  }
+
+  /* 明亮模式下的版权样式 */
+  body[theme="light"] footer.container-fluid {
+    color: #000000; /* 版权文本颜色为深灰色 */
+  }
+
+  body[theme="light"] footer.container-fluid a {
+    color: rgb(0, 0, 0); /* 版权链接颜色为黑色 */
+  }
+
+  body[theme="light"] footer.container-fluid a:hover {
+    color: rgb(73, 146, 255); /* 悬停时链接颜色变为蓝色 */
+  }
+
+  /* ！！！！！！！深色模式！！！！！！！ */
+
+  /* 深色模式的全局样式设置 */
+  body[theme="dark"] {
+    margin: 0; /* 清除默认外边距，确保样式整洁 */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* 设置字体为优雅的无衬线字体 */
+    background: rgba(0, 0, 0, 0.4); /* 深色背景色，透出下层内容 */
+    color: #ffffff; /* 设置文字颜色为白色，确保可读性 */
+    position: relative; /* 设置相对定位，以便子元素使用绝对定位 */
+    overflow-x: hidden; /* 隐藏横向溢出的内容 */
+  }
+
+  /* 深色模式的导航栏样式 */
+  body[theme="dark"] .navbar {
+    background-color: rgba(0, 0, 0, 0.4); /* 设置导航栏的背景色为半透明黑色 */
+    backdrop-filter: blur(2px); /* 添加模糊效果，增强层次感 */
+    -webkit-backdrop-filter: blur(2px); /* 为 Safari 浏览器添加兼容性 */
+    box-shadow: rgba(0, 0, 0, 0.4) 0 2px 5px; /* 添加阴影，提升视觉效果 */
+    border: none; /* 移除默认边框 */
+  }
+
+  /* 深色模式的下拉菜单样式 */
+  body[theme="dark"] .navbar .dropdown-menu {
+    background-color: rgba(0, 0, 0, 0.5); /* 设置下拉菜单背景色为半透明黑色 */
+    backdrop-filter: blur(2px); /* 模糊效果，提升层次感 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
+  }
+
+  /* 深色模式的按钮样式 */
+  body[theme="dark"] .navbar-nav > li > a,
+  body[theme="dark"] .dropdown-menu li a {
+    border-radius: 5px; /* 设置按钮圆角，提升美观度 */
+    color: rgba(255, 255, 255, 0.8); /* 按钮文字颜色为半透明白色 */
+  }
+
+  /* 深色模式的按钮悬停效果 */
+  body[theme="dark"] .navbar-nav > li > a:hover,
+  body[theme="dark"] .dropdown-menu li a:hover {
+    background-color: rgba(0, 0, 0, 0.2); /* 悬停时背景色为半透明黑色 */
+    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
+    color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
+  }
+
+  /* 深色模式的表格的透明背景 */
+  body[theme="dark"] .table,
+  body[theme="dark"] .table > thead > tr,
+  body[theme="dark"] .table > thead > tr > th,
+  body[theme="dark"] .table > tbody > tr,
+  body[theme="dark"] .table > tbody > tr > td,
+  body[theme="dark"] .table-condensed > tbody > tr,
+  body[theme="dark"] .table-hover > tbody > tr,
+  body[theme="dark"] .table-hover > tbody > tr:hover,
+  body[theme="dark"] .table-striped tbody > tr.even,
+  body[theme="dark"] .table-striped tbody > tr.odd,
+  body[theme="dark"] .table-striped tbody > tr.even > td,
+  body[theme="dark"] .table-striped tbody > tr.even > th,
+  body[theme="dark"] .table-striped tbody > tr.odd > td,
+  body[theme="dark"] .table-striped tbody > tr.odd > th,
+  body[theme="dark"] .table-striped tbody > tr.even > td:hover,
+  body[theme="dark"] .table-striped tbody > tr.even > th:hover,
+  body[theme="dark"] .table-striped tbody > tr.odd > td:hover,
+  body[theme="dark"] .table-striped tbody > tr.odd > th:hover,
+  body[theme="dark"] .table-striped tbody > tr.expandRow:hover {
+    background-color: transparent !important; /* 确保表格背景透明，突出显示下层内容 */
+  }
+
+  /* 深色模式的内容区域样式 */
+  body[theme="dark"] .content {
+    background-color: rgba(0, 0, 0, 0.4); /* 设置内容区域为半透明黑色背景 */
+    backdrop-filter: blur(2px); /* 背景模糊效果，增加视觉效果 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    box-shadow: rgba(0, 0, 0, 0.4) 0 0.625em 2em; /* 添加阴影，提升层次感 */
+    border: none; /* 移除边框 */
+  }
+
+  /* 深色模式的进度条样式 */
+  body[theme="dark"] .progress {
+    background-image: none; /* 移除背景图 */
+    background-color: rgba(255, 255, 255, 0.06); /* 设置背景色，降低透明度 */
+  }
+
+  /* 深色模式的工具箱按钮样式 */
+  body[theme="dark"] .toolbox span {
+    backdrop-filter: blur(2px); /* 模糊效果，增加美观 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    border-radius: 5px; /* 设置圆角效果，提升外观 */
+  }
+
+  /* 深色模式的工具按钮图标样式 */
+  body[theme="dark"] .toolbox span i {
+    background-color: rgba(28, 29, 38, 0.4); /* 图标背景为半透明深色 */
+    color: rgba(255, 255, 255, 0.9); /* 图标颜色为白色，确保可见性 */
+    font-size: 24px; /* 设置图标大小 */
+  }
+
+  /* 深色模式的工具按钮悬停效果 */
+  body[theme="dark"] .toolbox span:hover {
+    background-color: rgba(
+      28,
+      29,
+      38,
+      0.5
+    ); /* 悬停时背景颜色变为更深的半透明黑色 */
+    box-shadow: rgba(0, 0, 0, 0.5) 0 1em 3em; /* 悬停时添加阴影效果 */
+  }
+
+  body[theme="dark"] .toolbox span:hover i {
+    color: rgba(73, 146, 255, 1); /* 悬停时图标颜色变为蓝色 */
+  }
+
+  /* 深色模式的版权样式 */
+  body[theme="dark"] footer.container-fluid {
+    color: rgb(255, 255, 255); /* 版权文本颜色为白色 */
+  }
+
+  body[theme="dark"] footer.container-fluid a {
+    color: rgb(255, 255, 255); /* 链接颜色为白色 */
+  }
+
+  body[theme="dark"] footer.container-fluid a:hover {
+    color: rgb(73, 146, 255); /* 悬停时链接颜色变为蓝色 */
+  }
+</style>
 
 <script>
-    // 更改首页logo，在""中填入你的Logo URL
-    window.addEventListener("DOMContentLoaded", (event) => {
-      var logo = document.querySelector(".navbar-brand img");
-      if (logo) {
-        logo.src = ""; // 将此处的 URL 替换为你的Logo URL
-      }
-    });
-  </script>
-  <style>
-    /* 强制隐藏特定的元素 */
-    .right.menu > a,
-    .footer .is-size-7,
-    .item img {
-      display: none !important; /* 隐藏元素 */
-    }
-  
-    /* 设置背景图片及其样式 */
-    body {
-      content: " " !important;
-      background: fixed !important;
-      z-index: -1 !important;
-      top: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      left: 0 !important;
-      background-position: top !important;
-      background-repeat: no-repeat !important;
-      background-size: cover !important;
-      background-image: url(https://api.miaomc.cn/image/get) !important; /* 设置背景图片 */
-      font-family: Arial, Helvetica, sans-serif !important; /* 字体设置 */
-    }
-  
-    /* 屏幕适配设置 */
-    @media only screen and (min-width: 1200px) {
-      .ui.container {
-        width: 90% !important; /* 大屏幕下容器宽度设置 */
-      }
-    }
-  
-    @media only screen and (max-width: 767px) {
-      .ui.card > .content > .header:not(.ui),
-      .ui.cards > .card > .content > .header:not(.ui) {
-        margin-top: 0.4em !important; /* 小屏幕下标题的上边距设置 */
-      }
-    }
-  
-    /* 导航栏样式 */
-    .ui.large.menu {
-      border: 0 !important; /* 去掉边框 */
-      border-radius: 0px !important; /* 去掉圆角 */
-      background-color: rgba(255, 255, 255, 0.55) !important; /* 设置背景色和透明度 */
-    }
-  
-    /* 导航栏下拉菜单样式 */
-    .ui.dropdown .menu {
-      border: 0 !important; /* 去掉边框 */
-      border-radius: 0 !important; /* 去掉圆角 */
-      background-color: rgba(255, 255, 255, 0.8) !important; /* 设置背景色和透明度 */
-    }
-  
-    /* 登录按钮样式 */
-    .nezha-primary-btn {
-      background-color: transparent !important; /* 背景透明 */
-      color: #000 !important; /* 设置文字颜色 */
-    }
-  
-    /* 大卡片样式 */
-    #app .ui.fluid.accordion {
-      background-color: #fbfbfb26 !important; /* 设置背景色 */
-      border-radius: 0.4rem !important; /* 设置圆角 */
-    }
-  
-    /* 小卡片样式 */
-    .ui.four.cards > .card {
-      border-radius: 0.6rem !important; /* 设置圆角 */
-      background-color: #fafafaa3 !important; /* 设置背景色 */
-    }
-  
-    /* 进度条样式 */
-    .ui.progress {
-      border-radius: 50rem !important; /* 设置圆角 */
-    }
-    .ui.progress .bar {
-      min-width: 1.8em !important; /* 设置最小宽度 */
-      border-radius: 15px !important; /* 设置圆角 */
-      line-height: 1.65em !important; /* 设置行高 */
-      color: black; /* 字体颜色 */
-    }
-    .ui.progress > .bar {
-      background-color: #000 !important; /* 进度条背景色 */
-    }
-  
-    /* 弹出卡片样式 */
-    .ui.right.center.popup {
-      margin: -3px 0 0 0.914286em !important; /* 设置边距 */
-      -webkit-transform-origin: left 50% !important; /* 设置变换原点 */
-      transform-origin: left 50% !important; /* 设置变换原点 */
-    }
-  
-    /* 服务页样式 */
-    .ui.table {
-      background: RGB(225, 225, 225, 0.6) !important; /* 设置表格背景色 */
-    }
-  
-    .ui.table thead th {
-      background: transparent !important; /* 设置表头背景透明 */
-    }
-  
-    /* 明亮模式下的样式 */
-    body[theme="light"] {
-      margin: 0; /* 去掉默认边距 */
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* 设置字体 */
-      background: rgba(255, 255, 255, 0.4); /* 背景色和透明度 */
-      color: #333333; /* 深色字体 */
-      position: relative; /* 设置相对定位 */
-      overflow-x: hidden; /* 防止水平滚动 */
-    }
-  
-    /* 明亮模式下导航栏样式 */
-    body[theme="light"] .navbar {
-      background-color: rgba(255, 255, 255, 0.4); /* 背景色和透明度 */
-      backdrop-filter: blur(2px); /* 模糊效果 */
-      -webkit-backdrop-filter: blur(2px); /* 兼容 Safari */
-      box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px; /* 阴影效果 */
-      border: none; /* 去掉边框 */
-    }
-  
-    body[theme="light"] .navbar .navbar-brand {
-      color: #333333; /* 深色文字 */
-    }
-  
-    /* 明亮模式下下拉菜单样式 */
-    body[theme="light"] .navbar .dropdown-menu {
-      background-color: rgba(255, 255, 255, 0.425); /* 背景色和透明度 */
-      border-top: none; /* 去掉边框 */
-      backdrop-filter: blur(2px); /* 模糊效果 */
-      -webkit-backdrop-filter: blur(2px); /* 兼容 Safari */
-      border-color: #cccccc; /* 边框颜色 */
-      box-shadow: rgba(0, 0, 0, 0.18) 0px 6px 12px; /* 阴影效果 */
-    }
-  
-    body[theme="light"] .navbar .dropdown-menu > li > a {
-      color: #666666; /* 浅灰色文字 */
-    }
-    body[theme="light"] .navbar .dropdown-menu > li > a:focus,
-    body[theme="light"] .navbar .dropdown-menu > li > a:hover {
-      background-color: rgba(255, 255, 255, 0.475); /* 鼠标悬停背景色 */
-      background-image: linear-gradient(#f9f9f9 0, #f9f9f9 100%); /* 渐变效果 */
-    }
-  
-    body[theme="light"] .navbar .navbar-nav .open .dropdown-menu > li > a {
-      color: #333333; /* 深色文字 */
-    }
-  
-    /* 表格透明背景 */
-    body[theme="light"] .table,
-    body[theme="light"] .table-condensed > tbody > tr,
-    body[theme="light"] .table-hover > tbody > tr,
-    body[theme="light"] .table-hover > tbody > tr:hover,
-    body[theme="light"] .table-striped tbody > tr.even,
-    body[theme="light"] .table-striped tbody > tr.odd,
-    body[theme="light"] .table-striped tbody > tr.even > td,
-    body[theme="light"] .table-striped tbody > tr.even > th,
-    body[theme="light"] .table-striped tbody > tr.odd > td,
-    body[theme="light"] .table-striped tbody > tr.odd > th,
-    body[theme="light"] .table-striped tbody > tr.even > td:hover,
-    body[theme="light"] .table-striped tbody > tr.even > th:hover,
-    body[theme="light"] .table-striped tbody > tr.odd > td:hover,
-    body[theme="light"] .table-striped tbody > tr.odd > th:hover,
-    body[theme="light"] .table-striped tbody > tr.expandRow:hover {
-      background-color: transparent !important; /* 确保背景透明 */
-    }
-  
-    /* 明确设置thead和tbody的透明背景 */
-    body[theme="light"] .table > thead > tr,
-    body[theme="light"] .table > thead > tr > th,
-    body[theme="light"] .table > tbody > tr,
-    body[theme="light"] .table > tbody > tr > td {
-      background-color: transparent !important; /* 确保thead, tbody, td, th透明 */
-    }
-  
-    /* 表格 hover 状态透明 */
-    body[theme="light"] .table-hover > tbody > tr:not(.expandRow):hover > td {
-      background-color: rgba(255, 255, 255, 0.1) !important;
-    }
-  
-    /* 内容透明背景 */
-    body[theme="light"] .content {
-      background-color: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(2px); /* 模糊效果 */
-      -webkit-backdrop-filter: blur(2px); /* 兼容 Safari */
-      border: none;
-      box-shadow: rgba(0, 0, 0, 0.5) 0 0.625em 2em;
-    }
-  
-    /* 进度条背景样式 */
-    body[theme="light"] .progress {
-      background-image: none;
-      background-color: rgba(255, 255, 255, 0.038);
-    }
-  
-    /* 深色模式导航条背景与样式 */
-    body[theme="dark"] .navbar {
-      background-color: rgba(28, 29, 38, 0.64); /* 深色模式背景 */
-      backdrop-filter: blur(2px); /* 模糊效果 */
-      -webkit-backdrop-filter: blur(2px); /* 兼容 Safari */
-      box-shadow: rgba(0, 0, 0, 0.4) 0 2px 5px; /* 添加阴影效果，增加立体感 */
-      border: none; /* 去掉边框 */
-    }
-  
-    /* 深色模式下拉菜单样式 */
-    body[theme="dark"] .navbar .dropdown-menu {
-      background-color: rgba(0, 0, 0, 0.68); /* 降低透明度 */
-      backdrop-filter: blur(2px); /* 模糊效果 */
-      -webkit-backdrop-filter: blur(2px); /* 兼容 Safari */
-      border-top: none;
-      border-color: #31363b;
-      box-shadow: rgba(0, 0, 0, 0.144) 0px 6px 12px;
-    }
-  
-    body[theme="dark"] .navbar .dropdown-menu > li > a {
-      color: #c8c3bc; /* 下拉菜单链接颜色 */
-    }
-  
-    body[theme="dark"] .navbar .dropdown-menu > li > a:focus,
-    body[theme="dark"] .navbar .dropdown-menu > li > a:hover {
-      background-color: rgba(0, 0, 0, 0.64);
-      background-image: linear-gradient(#1c1d26 0, #1c1d26 100%);
-    }
-  
-    body[theme="dark"] .navbar .navbar-nav .open .dropdown-menu > li > a {
-      color: #f1f1f1; /* 选中的下拉菜单链接颜色 */
-    }
-  
-    /* 深色模式表格透明背景 */
-    body[theme="dark"] .table,
-    body[theme="dark"] .table-condensed > tbody > tr,
-    body[theme="dark"] .table-hover > tbody > tr,
-    body[theme="dark"] .table-hover > tbody > tr:hover,
-    body[theme="dark"] .table-striped tbody > tr.even,
-    body[theme="dark"] .table-striped tbody > tr.odd,
-    body[theme="dark"] .table-striped tbody > tr.even > td,
-    body[theme="dark"] .table-striped tbody > tr.even > th,
-    body[theme="dark"] .table-striped tbody > tr.odd > td,
-    body[theme="dark"] .table-striped tbody > tr.odd > th,
-    body[theme="dark"] .table-striped tbody > tr.even > td:hover,
-    body[theme="dark"] .table-striped tbody > tr.even > th:hover,
-    body[theme="dark"] .table-striped tbody > tr.odd > td:hover,
-    body[theme="dark"] .table-striped tbody > tr.odd > th:hover,
-    body[theme="dark"] .table-striped tbody > tr.expandRow:hover {
-      background-color: transparent !important; /* 深色模式表格背景透明 */
-    }
-  
-    /* 深色模式内容透明背景 */
-    body[theme="dark"] .content {
-      background-color: rgba(28, 29, 38, 0.64); /* 降低透明度 */
-      border: none;
-      box-shadow: rgba(0, 0, 0, 0.4) 0 0.625em 2em; /* 降低透明度 */
-      -webkit-box-shadow: rgba(0, 0, 0, 0.4) 0 0.625em 2em; /* 兼容 Safari */
-      backdrop-filter: blur(2px); /* 模糊效果 */
-      -webkit-backdrop-filter: blur(2px); /* 兼容 Safari */
-    }
-  
-    /* 深色模式表格特定单元格样式 */
-    body[theme="dark"] .table > thead > tr.node-group-tag > th,
-    body[theme="dark"] .table > thead > tr.node-group-tag > th:before {
-      background: unset; /* 深色模式特定单元格背景 */
-    }
-  
-    body[theme="dark"] .table > tbody > tr > td:before,
-    body[theme="dark"] .table > tfoot > tr > td:before,
-    body[theme="dark"] .table > thead > tr > td:before,
-    body[theme="dark"] .table > thead > tr.node-group-cell > th:before {
-      background-color: rgba(155, 155, 155, 0.08); /* 降低透明度 */
-    }
-  
-    body[theme="dark"] .table-hover > tbody > tr:not(.expandRow):hover > td {
-      background-color: unset; /* 深色模式表格 hover 状态透明 */
-    }
-  
-    /* 深色模式进度条样式 */
-    body[theme="dark"] .progress {
-      background-image: none;
-      background-color: rgba(255, 255, 255, 0.06); /* 降低透明度 */
-    }
-  </style>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      try {
-        var downtimeCells = document.querySelectorAll("th.node-cell.os.center");
-        if (!downtimeCells) throw new Error("找不到表头列");
-  
-        downtimeCells.forEach(function (cell) {
-          var newTh = document.createElement("th");
-          newTh.className = "node-cell downtime center";
-          newTh.textContent = "到期倒计时";
-          newTh.style.minWidth = "120px";
-          cell.parentNode.insertBefore(newTh, cell.nextSibling);
-  
-          var renewalTh = document.createElement("th");
-          renewalTh.className = "node-cell renewal center";
-          renewalTh.textContent = "金额/周期/续费";
-          renewalTh.style.minWidth = "120px";
-          cell.parentNode.insertBefore(renewalTh, newTh.nextSibling);
-        });
-  
-        const affLinks = {
-          1: {
-            startDate: new Date("2023-03-04T00:00:00+08:00"),
-            endDate: new Date("2025-09-04T00:00:00+08:00"),
-            amount: "// 这里写入你的价格 CNY / Annually",
-            link: "// 这里写入你的链接",
-          }, // 前面写入你的到期时间，格式不要修改
-          2: {
-            startDate: new Date("2023-03-04T00:00:00+08:00"),
-            endDate: new Date("2025-09-04T00:00:00+08:00"),
-            amount: "//这里写入你的价格 CNY / Annually",
-            link: "//这里写入你的链接",
-          }, 
-        };// 前面写入你的到期时间，格式不要修改
-  
-        const createCountdown = (startDate, endDate) => {
-          const $countdown = document.createElement("div");
-          $countdown.className = "countdown";
-          $countdown.style.position = "relative";
-          $countdown.style.width = "100%";
-          $countdown.style.height = "20px";
-          $countdown.style.backgroundColor = "#3e3e3e";
-          $countdown.style.borderRadius = "4px";
-          $countdown.style.overflow = "hidden";
-  
-          const $progress = document.createElement("div");
-          $progress.className = "progress";
-          $progress.style.position = "absolute";
-          $progress.style.height = "100%";
-          $progress.style.width = "0%";
-          $progress.style.backgroundImage =
-            "linear-gradient(to right, #48dbfb, #feca57, #ff6b6b)";
-          $progress.style.transition = "width 0.6s ease";
-          $progress.style.borderRadius = "4px 0 0 4px";
-  
-          const $countdownTime = document.createElement("div");
-          $countdownTime.style.position = "absolute";
-          $countdownTime.style.width = "100%";
-          $countdownTime.style.height = "100%";
-          $countdownTime.style.display = "flex";
-          $countdownTime.style.alignItems = "center";
-          $countdownTime.style.justifyContent = "space-between"; // 左右对齐
-          $countdownTime.style.color = "#fff";
-          $countdownTime.style.fontWeight = "bold";
-          $countdownTime.style.fontSize = "inherit";
-          $countdownTime.style.textShadow = "1px 1px 2px rgba(0,0,0,0.7)";
-          $countdownTime.style.padding = "0 7.5px"; // 左右内边距
-  
-          const updateCountdown = () => {
-            const now = new Date();
-            const totalDuration = endDate.getTime() - startDate.getTime();
-            const elapsedDuration = now.getTime() - startDate.getTime();
-            const remainingDuration = endDate.getTime() - now.getTime();
-  
-            if (remainingDuration <= 0) {
-              $countdownTime.innerHTML = "<span>已过期</span>";
-              $progress.style.width = "100%";
-              $progress.style.backgroundColor = "#ff0000";
-              $progress.style.backgroundImage = "none";
-              return;
-            }
-  
-            const days = Math.floor(remainingDuration / (1000 * 60 * 60 * 24));
-            const hours = Math.floor(
-              (remainingDuration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-            );
-            const minutes = Math.floor(
-              (remainingDuration % (1000 * 60 * 60)) / (1000 * 60),
-            );
-            const seconds = Math.floor((remainingDuration % (1000 * 60)) / 1000);
-            const progressPercent = (elapsedDuration / totalDuration) * 100;
-  
-            if (days > 0) {
-              $countdownTime.innerHTML = `
-                              <span>${days} day</span>
-                              <span>${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}</span>
-                          `;
-            } else {
-              $countdownTime.innerHTML = `
-                              <span></span>
-                              <span>${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}</span>
-                          `;
-            }
-            $progress.style.width = `${progressPercent}%`;
-          };
-  
-          updateCountdown();
-          setInterval(updateCountdown, 1000);
-  
-          $countdown.appendChild($progress);
-          $countdown.appendChild($countdownTime);
-  
-          return $countdown;
-        };
-  
-        const rows = document.querySelectorAll("tr");
-        rows.forEach((row) => {
-          let osCell = row.querySelector("td.node-cell.os.center");
-          if (!osCell) return;
-  
-          let downtimeCell = document.createElement("td");
-          downtimeCell.classList.add("node-cell", "downtime", "center");
-          downtimeCell.style.minWidth = "120px";
-  
-          let renewalCell = document.createElement("td");
-          renewalCell.classList.add("node-cell", "renewal", "center");
-          renewalCell.style.minWidth = "120px";
-  
-          let nodeId = row.id ? row.id.substring(1) : null;
-          if (!nodeId || !affLinks[nodeId]) {
-            downtimeCell.textContent = "无信息";
-            renewalCell.textContent = "无信息";
-            osCell.parentNode.insertBefore(downtimeCell, osCell.nextSibling);
-            osCell.parentNode.insertBefore(renewalCell, downtimeCell.nextSibling);
+  document.addEventListener("DOMContentLoaded", function () {
+    try {
+      var downtimeCells = document.querySelectorAll("th.node-cell.os.center");
+      if (!downtimeCells) throw new Error("找不到表头列");
+
+      downtimeCells.forEach(function (cell) {
+        var newTh = document.createElement("th");
+        newTh.className = "node-cell downtime center";
+        newTh.textContent = "到期倒计时";
+        newTh.style.minWidth = "120px";
+        cell.parentNode.insertBefore(newTh, cell.nextSibling);
+
+        var renewalTh = document.createElement("th");
+        renewalTh.className = "node-cell renewal center";
+        renewalTh.textContent = "金额/周期/续费";
+        renewalTh.style.minWidth = "120px";
+        cell.parentNode.insertBefore(renewalTh, newTh.nextSibling);
+      });
+
+      const affLinks = {
+        1: {
+          startDate: new Date("2023-03-04T00:00:00+08:00"),
+          endDate: new Date("2025-09-04T00:00:00+08:00"),
+          amount: "// 这里写入你的价格 CNY / Annually",
+          link: "// 这里写入你的链接",
+        }, // 前面写入你的到期时间，格式不要修改
+        2: {
+          startDate: new Date("2023-03-04T00:00:00+08:00"),
+          endDate: new Date("2025-09-04T00:00:00+08:00"),
+          amount: "//这里写入你的价格 CNY / Annually",
+          link: "//这里写入你的链接",
+        },
+      }; // 前面写入你的到期时间，格式不要修改
+
+      const createCountdown = (startDate, endDate) => {
+        const $countdown = document.createElement("div");
+        $countdown.className = "countdown";
+        $countdown.style.position = "relative";
+        $countdown.style.width = "100%";
+        $countdown.style.height = "20px";
+        $countdown.style.backgroundColor = "#3e3e3e";
+        $countdown.style.borderRadius = "4px";
+        $countdown.style.overflow = "hidden";
+
+        const $progress = document.createElement("div");
+        $progress.className = "progress";
+        $progress.style.position = "absolute";
+        $progress.style.height = "100%";
+        $progress.style.width = "0%";
+        $progress.style.backgroundImage =
+          "linear-gradient(to right, #48dbfb, #feca57, #ff6b6b)";
+        $progress.style.transition = "width 0.6s ease";
+        $progress.style.borderRadius = "4px 0 0 4px";
+
+        const $countdownTime = document.createElement("div");
+        $countdownTime.style.position = "absolute";
+        $countdownTime.style.width = "100%";
+        $countdownTime.style.height = "100%";
+        $countdownTime.style.display = "flex";
+        $countdownTime.style.alignItems = "center";
+        $countdownTime.style.justifyContent = "space-between";
+        $countdownTime.style.color = "#fff";
+        $countdownTime.style.fontWeight = "bold";
+        $countdownTime.style.fontSize = "inherit";
+        $countdownTime.style.textShadow = "1px 1px 2px rgba(0,0,0,0.7)";
+        $countdownTime.style.padding = "0 7.5px";
+
+        const updateCountdown = () => {
+          const now = new Date();
+          const totalDuration = endDate.getTime() - startDate.getTime();
+          const elapsedDuration = now.getTime() - startDate.getTime();
+          const remainingDuration = endDate.getTime() - now.getTime();
+
+          if (remainingDuration <= 0) {
+            $countdownTime.innerHTML = "<span>已过期</span>";
+            $progress.style.width = "100%";
+            $progress.style.backgroundColor = "#ff0000";
+            $progress.style.backgroundImage = "none";
             return;
           }
-  
-          let affLink = affLinks[nodeId];
-          if (affLink.startDate && affLink.endDate) {
-            let countdown = createCountdown(affLink.startDate, affLink.endDate);
-            downtimeCell.appendChild(countdown);
+
+          const days = Math.floor(remainingDuration / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (remainingDuration % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+          );
+          const minutes = Math.floor(
+            (remainingDuration % (1000 * 60 * 60)) / (1000 * 60),
+          );
+          const seconds = Math.floor((remainingDuration % (1000 * 60)) / 1000);
+          const progressPercent = (elapsedDuration / totalDuration) * 100;
+
+          if (days > 0) {
+            $countdownTime.innerHTML = `
+    <span class="days">${days} Day</span>
+    <span class="time">
+      <span class="hours">${hours.toString().padStart(2, "0")}:</span>
+      <span class="minutes">${minutes.toString().padStart(2, "0")}:</span>
+      <span class="seconds">${seconds.toString().padStart(2, "0")}</span>
+    </span>
+  `;
           } else {
-            downtimeCell.textContent = "无到期信息";
+            $countdownTime.innerHTML = `
+    <span class="time">
+      <span class="hours">${hours.toString().padStart(2, "0")}:</span>
+      <span class="minutes">${minutes.toString().padStart(2, "0")}:</span>
+      <span class="seconds">${seconds.toString().padStart(2, "0")}</span>
+    </span>
+  `;
           }
-  
-          let amountText = affLink.amount
-            ? affLink.amount.replace(/[\$€¥]/g, "")
-            : "无信息";
-          let link = affLink.link || "#";
-  
-          renewalCell.className = "node-cell buy";
-          renewalCell.style.textAlign = "center";
-  
-          // Function to update the cell content based on the current theme
-          const updateCellContent = () => {
-            const isDarkTheme =
-              document.body.getAttribute("theme") === "dark" ||
-              document.body.classList.contains("dark-theme") ||
-              window.matchMedia("(prefers-color-scheme: dark)").matches;
-  
-            const labelStyle = isDarkTheme
-              ? "background-color: rgba(255, 255, 255, 0.1); color: #ffffff;"
-              : "background-color: rgba(0, 0, 0, 0); color: #000000;";
-  
-            renewalCell.innerHTML = `
-                  <div class="ui basic label mini" style="min-height: 20px; padding: 0 .5em; height: 20px; font-weight: normal; line-height: 20px; font-size: .78571429rem; ${labelStyle}">
-                      ${amountText}
-                  </div>
-                  <a class="ui icon button mini green" href="${link}" target="_blank" style="min-height: 20px; padding: 0 5px; line-height: 20px; background-color: #21ba45; color: #ffffff;">续费</a>
-              `;
-          };
-  
-          // Initial update
-          updateCellContent();
-  
-          // Listen for theme changes
-          const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-              if (
-                mutation.type === "attributes" &&
-                mutation.attributeName === "theme"
-              ) {
-                updateCellContent();
-              }
-            });
-          });
-  
-          observer.observe(document.body, { attributes: true });
-  
-          // Also listen for system color scheme changes
-          window
-            .matchMedia("(prefers-color-scheme: dark)")
-            .addListener(updateCellContent);
-  
+
+          $progress.style.width = `${progressPercent}%`;
+        };
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        $countdown.appendChild($progress);
+        $countdown.appendChild($countdownTime);
+
+        return $countdown;
+      };
+
+      const rows = document.querySelectorAll("tr");
+      rows.forEach((row) => {
+        let osCell = row.querySelector("td.node-cell.os.center");
+        if (!osCell) return;
+
+        let downtimeCell = document.createElement("td");
+        downtimeCell.classList.add("node-cell", "downtime", "center");
+        downtimeCell.style.minWidth = "120px";
+
+        let renewalCell = document.createElement("td");
+        renewalCell.classList.add("node-cell", "renewal", "center");
+        renewalCell.style.minWidth = "120px";
+
+        let nodeId = row.id ? row.id.substring(1) : null;
+        if (!nodeId || !affLinks[nodeId]) {
+          downtimeCell.textContent = "无信息";
+          renewalCell.textContent = "无信息";
           osCell.parentNode.insertBefore(downtimeCell, osCell.nextSibling);
           osCell.parentNode.insertBefore(renewalCell, downtimeCell.nextSibling);
+          return;
+        }
+
+        let affLink = affLinks[nodeId];
+        if (affLink.startDate && affLink.endDate) {
+          let countdown = createCountdown(affLink.startDate, affLink.endDate);
+          downtimeCell.appendChild(countdown);
+        } else {
+          downtimeCell.textContent = "无到期信息";
+        }
+
+        let amountText = affLink.amount
+          ? affLink.amount.replace(/[\$€¥]/g, "")
+          : "无信息";
+        let link = affLink.link || "#";
+
+        renewalCell.className = "node-cell buy";
+        renewalCell.style.textAlign = "center";
+
+        // Function to update the cell content based on the current theme
+        const updateCellContent = () => {
+          const isDarkTheme =
+            document.body.getAttribute("theme") === "dark" ||
+            document.body.classList.contains("dark-theme") ||
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+          const labelStyle = isDarkTheme
+            ? "background-color: rgba(255, 255, 255, 0.1); color: #ffffff;"
+            : "background-color: rgba(0, 0, 0, 0); color: #000000;";
+
+          renewalCell.innerHTML = `
+                    <div class="ui basic label mini" style="min-height: 20px; padding: 0 .5em; height: 20px; font-weight: normal; line-height: 20px; font-size: .78571429rem; ${labelStyle}">
+                        ${amountText}
+                    </div>
+                    <a class="ui icon button mini green" href="${link}" target="_blank" style="min-height: 20px; padding: 0 5px; line-height: 20px; background-color: #21ba45; color: #ffffff;">续费</a>
+                `;
+        };
+
+        // Initial update
+        updateCellContent();
+
+        // Listen for theme changes
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (
+              mutation.type === "attributes" &&
+              mutation.attributeName === "theme"
+            ) {
+              updateCellContent();
+            }
+          });
         });
-      } catch (error) {
-        console.error("发生错误:", error.message);
-      }
-    });
-  </script>
-  
+
+        observer.observe(document.body, { attributes: true });
+
+        // Also listen for system color scheme changes
+        window
+          .matchMedia("(prefers-color-scheme: dark)")
+          .addListener(updateCellContent);
+
+        osCell.parentNode.insertBefore(downtimeCell, osCell.nextSibling);
+        osCell.parentNode.insertBefore(renewalCell, downtimeCell.nextSibling);
+      });
+    } catch (error) {
+      console.error("发生错误:", error.message);
+    }
+  });
+</script>
