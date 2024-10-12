@@ -1,11 +1,11 @@
-<!-- ！！！仅支持 ServerStatus 主题！！！ -->
-<!-- 更新时间：2024-10-12 11:02:49 -->
+<!-- ！！！仅支持 ServerStatus 主题！！！注释由 AI 编写，仅供参考！！！ -->
+<!-- 更新时间：2024-10-12 19:11:41 -->
 <!-- 原作者：https://t.me/musicclub1563 -->
 <!-- 在此感谢原作者 -->
-<!-- 个性化设置：(1)Logo的URL  （2）背景的URL  (3)设备的购买、到期时间、价格、官网地址 -->
+<!-- 个性化设置：(1）探针Logo  （2）全局背景  （3）全局字体  （4）光标特效   (5）设备的购买、到期时间、价格、官网地址 -->
 <!-- 重构：https://t.me/cuteysking -->
 <!-- 重构说明：增加半成品模糊效果，增加按钮特效，精简代码，优化若干细节，修复若干 Bug -->
-<!-- 已知错误：导航栏下拉框无模糊效果，原因为".navbar"元素与".navbar .dropdown-menu"元素模糊效果冲突，本人能力不足暂时无法修改 -->
+<!-- 已知错误：下拉框无模糊效果，原因为".navbar"类与".navbar .dropdown-menu"类冲突，本人能力不足暂时无法修改 -->
 <script>
   // 更改首页logo，在""中填入你的Logo URL
   window.addEventListener("DOMContentLoaded", (event) => {
@@ -15,6 +15,147 @@
     }
   });
 </script>
+<!-- 光标小星星拖尾跟随特效 -->
+<span class="js-cursor-container"></span>
+<script>
+  (function fairyDustCursor() {
+    var possibleColors = ["#D61C59", "#E7D84B", "#1B8798"];
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+    var cursor = { x: width / 2, y: width / 2 };
+    var particles = [];
+
+    function init() {
+      bindEvents();
+      loop();
+    }
+
+    // Bind events that are needed
+    function bindEvents() {
+      document.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("resize", onWindowResize);
+    }
+
+    function onWindowResize(e) {
+      width = window.innerWidth;
+      height = window.innerHeight;
+    }
+
+    function onMouseMove(e) {
+      cursor.x = e.clientX;
+      cursor.y = e.clientY;
+
+      addParticle(
+        cursor.x,
+        cursor.y,
+        possibleColors[Math.floor(Math.random() * possibleColors.length)],
+      );
+    }
+
+    function addParticle(x, y, color) {
+      var particle = new Particle();
+      particle.init(x, y, color);
+      particles.push(particle);
+    }
+
+    function updateParticles() {
+      // Updated
+      for (var i = 0; i < particles.length; i++) {
+        particles[i].update();
+      }
+
+      // Remove dead particles
+      for (var i = particles.length - 1; i >= 0; i--) {
+        if (particles[i].lifeSpan < 0) {
+          particles[i].die();
+          particles.splice(i, 1);
+        }
+      }
+    }
+
+    function loop() {
+      requestAnimationFrame(loop);
+      updateParticles();
+    }
+
+    /**
+     * Particles
+     */
+
+    function Particle() {
+      this.character = "*";
+      this.lifeSpan = 120; //ms
+      this.initialStyles = {
+        position: "fixed",
+        display: "inline-block",
+        top: "0px",
+        left: "0px",
+        pointerEvents: "none",
+        "touch-action": "none",
+        "z-index": "10000000",
+        fontSize: "25px",
+        "will-change": "transform",
+      };
+
+      // Init, and set properties
+      this.init = function (x, y, color) {
+        this.velocity = {
+          x: (Math.random() < 0.5 ? -1 : 1) * (Math.random() / 2),
+          y: 1,
+        };
+
+        this.position = { x: x + 10, y: y + 10 };
+        this.initialStyles.color = color;
+
+        this.element = document.createElement("span");
+        this.element.innerHTML = this.character;
+        applyProperties(this.element, this.initialStyles);
+        this.update();
+
+        document
+          .querySelector(".js-cursor-container")
+          .appendChild(this.element);
+      };
+
+      this.update = function () {
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+        this.lifeSpan--;
+
+        this.element.style.transform =
+          "translate3d(" +
+          this.position.x +
+          "px," +
+          this.position.y +
+          "px, 0) scale(" +
+          this.lifeSpan / 120 +
+          ")";
+      };
+
+      this.die = function () {
+        this.element.parentNode.removeChild(this.element);
+      };
+    }
+
+    /**
+     * Utils
+     */
+
+    // Applies css `properties` to an element.
+    function applyProperties(target, properties) {
+      for (var key in properties) {
+        target.style[key] = properties[key];
+      }
+    }
+
+    if (!("ontouchstart" in window || navigator.msMaxTouchPoints)) init();
+  })();
+</script>
+<!-- 导入字体 -->
+<link
+  rel="stylesheet"
+  href="https://registry.npmmirror.com/lxgw-wenkai-screen-web/1.330.1/files/style.css"
+/>
 <style>
   /* 强制隐藏指定的导航菜单、页脚文本以及图像元素 */
   .right.menu > a,  /* 隐藏右侧菜单中的链接 */
@@ -24,7 +165,7 @@
     display: none !important; /* 使用 !important 确保样式生效 */
   }
 
-  /* 设置全局背景图片和字体 */
+  /* 设置全局背景图片 */
   body {
     background: url(https://api.miaomc.cn/image/get) center center no-repeat
       fixed !important; /* 背景图固定在页面中央 */
@@ -32,9 +173,20 @@
     min-height: 100vh; /* 保证背景图至少覆盖整个视口高度 */
     margin: 0; /* 移除 body 的默认外边距 */
     padding: 0; /* 移除 body 的默认内边距 */
-    font-family: Arial, Helvetica, sans-serif !important; /* 设置全局字体 */
   }
-
+  /* 全局字体样式修改 */
+  body,
+  #post-content,
+  .code-toolbar {
+    font-family:
+      "LXGW WenKai Screen",
+      PingFang SC,
+      Hiragino Sans GB,
+      Droid Sans Fallback,
+      Microsoft YaHei,
+      sans-serif !important;
+    font-weight: 550; /* 字体粗细 */
+  }
   /* 针对宽度小于 1499px 的设备进行样式调整 */
   @media (max-width: 1499px) {
     .countdown .time {
@@ -97,6 +249,7 @@
     .ui.card > .content > .header:not(.ui),
     .ui.cards > .card > .content > .header:not(.ui) {
       margin-top: 0.4em !important; /* 增加标题上方间距 */
+      font-size: 1.2em !important; /* 缩小标题字体 */
     }
   }
 
@@ -170,38 +323,55 @@
     overflow-x: hidden; /* 隐藏横向溢出的内容 */
   }
 
-  /* 明亮模式下的导航栏样式 */
+  /* 明亮模式的导航栏样式 */
   body[theme="light"] .navbar {
     background-color: rgba(255, 255, 255, 0.25); /* 半透明背景色 */
-    backdrop-filter: blur(2px); /* 模糊背景效果，提升视觉层次 */
     -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 背景模糊效果*/
     box-shadow: rgba(0, 0, 0, 0.25) 0 2px 5px; /* 添加阴影效果，增强立体感 */
     border: none; /* 移除边框 */
   }
 
-  /* 明亮模式下的下拉菜单样式 */
-  body[theme="light"] .navbar .dropdown-menu {
-    background-color: rgba(255, 255, 255, 0.3); /* 半透明背景色 */
-    backdrop-filter: blur(2px); /* 背景模糊效果 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
-  }
-
-  /* 明亮模式导航栏按钮样式 */
+  /* 明亮模式的导航栏与下拉菜单按钮样式 */
   body[theme="light"] .navbar-nav > li > a,
-  body[theme="light"] .dropdown-menu li a {
+  body[theme="light"] .navbar .dropdown-menu li a {
     border-radius: 5px; /* 圆角效果，提升美观 */
   }
 
-  /* 明亮模式导航栏按钮悬停效果 */
-  body[theme="light"] .navbar-nav > li > a:hover,
-  body[theme="light"] .dropdown-menu li a:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* 悬停时背景色变为半透明白色 */
+  /* 明亮模式的导航栏按钮悬停效果 */
+  body[theme="light"] .navbar-nav > li > a:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important; /* 悬停时背景色变为半透明白色 */
+    background-image: linear-gradient(
+      rgba(255, 255, 255, 0.2) 0,
+      rgba(255, 255, 255, 0.2) 100%
+    ) !important;
     box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
     color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
+    transition: all 0.2s ease; /* 平滑过渡 */
   }
 
-  /* 明亮模式下表格的透明背景 */
+  /* 明亮模式的下拉菜单样式 */
+  body[theme="light"] .navbar .dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.5) !important; /* 半透明背景色 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 背景模糊效果 */
+    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
+  }
+
+  /* 明亮模式的下拉菜单按钮悬停效果 */
+  body[theme="light"] .navbar .dropdown-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important; /* 悬停时背景色为半透明白色 */
+    background-image: linear-gradient(
+      rgba(255, 255, 255, 0.2) 0,
+      rgba(255, 255, 255, 0.2) 100%
+    ) !important;
+    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
+    color: rgb(73, 146, 255) !important; /* 悬停时文字颜色变为蓝色 */
+    border-radius: 5px; /* 圆角效果 */
+    transition: all 0.2s ease; /* 平滑过渡 */
+  }
+
+  /* 明亮模式的表格的透明背景 */
   body[theme="light"] .table,
   body[theme="light"] .table > thead > tr,
   body[theme="light"] .table > thead > tr > th,
@@ -224,11 +394,50 @@
     background-color: transparent !important; /* 确保表格背景透明，展示下层内容 */
   }
 
-  /* 明亮模式下的内容区域透明背景 */
+  /* 明亮模式的网络监控下拉菜单样式 */
+  body[theme="light"] .dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.2); /* 半透明背景色 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 背景模糊效果 */
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px; /* 下拉菜单的阴影效果 */
+    border-radius: 5px; /* 圆角效果 */
+    padding: 10px 0; /* 内边距，上下 */
+  }
+
+  /* 明亮模式的网络监控输入框样式 */
+  body[theme="light"] #dropdown-search {
+    background-color: rgba(255, 255, 255, 0.5); /* 半透明背景色 */
+    border: 1px solid rgba(255, 255, 255); /* 边框颜色 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 背景模糊效果 */
+    border-radius: 5px; /* 圆角效果 */
+    transition: border-color 0.3s; /* 边框颜色变化的过渡效果 */
+  }
+
+  /* 明亮模式的网络监控下拉项链接样式 */
+  body[theme="light"] .dropdown-menu li a {
+    color: rgb(0, 0, 0); /* 默认文字颜色 */
+  }
+
+  /* 明亮模式的网络监控下拉项链接悬停效果 */
+  body[theme="light"] .dropdown-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.35); /* 悬停时背景色变为半透明白色 */
+    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
+    color: rgb(0, 123, 255); /* 悬停时文字颜色变为蓝色 */
+    transition: all 0.2s ease; /* 平滑过渡 */
+  }
+
+  /* 明亮模式的网络监控选中项样式 */
+  body[theme="light"] .dropdown-menu li .check.icon {
+    margin-left: auto; /* 自动外边距，使其靠右 */
+    color: rgb(0, 123, 255); /* 选中项的图标颜色 */
+  }
+
+  /* 明亮模式的网络监控内容区域样式 */
   body[theme="light"] .content {
     background-color: rgba(255, 255, 255, 0.25); /* 设置半透明背景色 */
-    backdrop-filter: blur(2px); /* 模糊背景效果，提升视觉效果 */
     -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 模糊背景效果，提升视觉效果 */
     box-shadow: rgba(0, 0, 0, 0.25) 0 0.625em 2em; /* 添加阴影，提升层次感 */
     border: none; /* 移除边框 */
   }
@@ -241,8 +450,8 @@
 
   /* 明亮模式下工具箱按钮样式 */
   body[theme="light"] .toolbox span {
-    backdrop-filter: blur(2px); /* 模糊效果，提升视觉效果 */
     -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 模糊效果，提升视觉效果 */
     border-radius: 5px; /* 设置圆角效果 */
   }
 
@@ -257,13 +466,15 @@
   body[theme="light"] .toolbox span:hover {
     background-color: rgba(255, 255, 255, 0.2); /* 悬停时背景颜色变为半透明白色 */
     box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
+    transition: all 0.2s ease; /* 平滑过渡 */
   }
 
   body[theme="light"] .toolbox span:hover i {
     color: rgb(73, 146, 255); /* 悬停时图标颜色变为蓝色 */
+    transition: all 0.2s ease; /* 平滑过渡 */
   }
 
-  /* 明亮模式下的版权样式 */
+  /* 明亮模式的版权样式 */
   body[theme="light"] footer.container-fluid {
     color: #000000; /* 版权文本颜色为深灰色 */
   }
@@ -274,6 +485,7 @@
 
   body[theme="light"] footer.container-fluid a:hover {
     color: rgb(73, 146, 255); /* 悬停时链接颜色变为蓝色 */
+    transition: all 0.2s ease; /* 平滑过渡 */
   }
 
   /* ！！！！！！！深色模式！！！！！！！ */
@@ -291,32 +503,49 @@
   /* 深色模式的导航栏样式 */
   body[theme="dark"] .navbar {
     background-color: rgba(0, 0, 0, 0.4); /* 设置导航栏的背景色为半透明黑色 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
     backdrop-filter: blur(2px); /* 添加模糊效果，增强层次感 */
-    -webkit-backdrop-filter: blur(2px); /* 为 Safari 浏览器添加兼容性 */
     box-shadow: rgba(0, 0, 0, 0.4) 0 2px 5px; /* 添加阴影，提升视觉效果 */
     border: none; /* 移除默认边框 */
   }
 
-  /* 深色模式的下拉菜单样式 */
-  body[theme="dark"] .navbar .dropdown-menu {
-    background-color: rgba(0, 0, 0, 0.5); /* 设置下拉菜单背景色为半透明黑色 */
-    backdrop-filter: blur(2px); /* 模糊效果，提升层次感 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
-  }
-
-  /* 深色模式的按钮样式 */
+  /* 深色模式导航栏和下拉菜单的按钮样式 */
   body[theme="dark"] .navbar-nav > li > a,
-  body[theme="dark"] .dropdown-menu li a {
+  body[theme="dark"] .navbar .dropdown-menu li a {
     border-radius: 5px; /* 设置按钮圆角，提升美观度 */
   }
 
   /* 深色模式的按钮悬停效果 */
-  body[theme="dark"] .navbar-nav > li > a:hover,
-  body[theme="dark"] .dropdown-menu li a:hover {
-    background-color: rgba(0, 0, 0, 0.2); /* 悬停时背景色为半透明黑色 */
+  body[theme="dark"] .navbar-nav > li > a:hover {
+    background-color: rgba(0, 0, 0, 0.2) !important; /* 悬停时背景色为半透明黑色 */
+    background-image: linear-gradient(
+      rgba(0, 0, 0, 0.2) 0,
+      rgba(0, 0, 0, 0.2) 100%
+    ) !important;
     box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
     color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
+    transition: all 0.2s ease; /* 平滑过渡 */
+  }
+
+  /* 深色模式的下拉菜单样式 */
+  body[theme="dark"] .navbar .dropdown-menu {
+    background-color: rgba(0, 0, 0, 0.5) !important; /* 设置下拉菜单背景色为半透明黑色 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 模糊效果，提升层次感 */
+    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
+  }
+
+  /* 深色模式的下拉菜单按钮悬停效果 */
+  body[theme="dark"] .navbar .dropdown-menu li a:hover {
+    background-color: rgba(0, 0, 0, 0.2) !important; /* 悬停时背景色为半透明白色 */
+    background-image: linear-gradient(
+      rgba(0, 0, 0, 0.2) 0,
+      rgba(0, 0, 0, 0.2) 100%
+    ) !important;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
+    color: rgb(73, 146, 255) !important; /* 悬停时文字颜色变为蓝色 */
+    border-radius: 5px; /* 圆角效果 */
+    transition: all 0.3s ease; /* 平滑过渡 */
   }
 
   /* 深色模式的表格的透明背景 */
@@ -342,11 +571,51 @@
     background-color: transparent !important; /* 确保表格背景透明，突出显示下层内容 */
   }
 
+  /* 深色模式的网络监控下拉菜单样式 */
+  body[theme="dark"] .dropdown-menu {
+    background-color: rgba(0, 0, 0, 0.2); /* 半透明背景色 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 背景模糊效果 */
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px; /* 下拉菜单的阴影效果 */
+    border-radius: 5px; /* 圆角效果 */
+    padding: 10px 0; /* 内边距，上下 */
+  }
+
+  /* 深色模式的网络监控输入框样式 */
+  body[theme="dark"] #dropdown-search {
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明背景色 */
+    border: 1px solid rgb(0, 0, 0); /* 边框颜色 */
+    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 背景模糊效果 */
+    border-radius: 5px; /* 圆角效果 */
+    transition: border-color 0.3s; /* 边框颜色变化的过渡效果 */
+    transition: all 0.2s ease; /* 平滑过渡 */
+  }
+
+  /* 深色模式的网络监控下拉项链接样式 */
+  body[theme="dark"] .dropdown-menu li a {
+    color: white; /* 默认文字颜色 */
+  }
+
+  /* 深色模式的网络监控下拉项链接悬停效果 */
+  body[theme="dark"] .dropdown-menu li a:hover {
+    background-color: rgba(0, 0, 0, 0.35); /* 悬停时背景色变为半透明白色 */
+    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
+    color: rgb(0, 123, 255); /* 悬停时文字颜色变为蓝色 */
+    transition: all 0.2s ease; /* 平滑过渡 */
+  }
+
+  /* 深色模式的网络监控选中项样式 */
+  body[theme="dark"] .dropdown-menu li .check.icon {
+    margin-left: auto; /* 自动外边距，使其靠右 */
+    color: rgb(0, 123, 255); /* 选中项的图标颜色 */
+  }
+
   /* 深色模式的内容区域样式 */
   body[theme="dark"] .content {
     background-color: rgba(0, 0, 0, 0.4); /* 设置内容区域为半透明黑色背景 */
-    backdrop-filter: blur(2px); /* 背景模糊效果，增加视觉效果 */
     -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 背景模糊效果，增加视觉效果 */
     box-shadow: rgba(0, 0, 0, 0.4) 0 0.625em 2em; /* 添加阴影，提升层次感 */
     border: none; /* 移除边框 */
   }
@@ -359,8 +628,8 @@
 
   /* 深色模式的工具箱按钮样式 */
   body[theme="dark"] .toolbox span {
-    backdrop-filter: blur(2px); /* 模糊效果，增加美观 */
     -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+    backdrop-filter: blur(2px); /* 模糊效果，增加美观 */
     border-radius: 5px; /* 设置圆角效果，提升外观 */
   }
 
@@ -375,6 +644,7 @@
   body[theme="dark"] .toolbox span:hover {
     background-color: rgba(28, 29, 38, 0.5); /* 悬停时背景颜色变为更深的半透明黑色 */
     box-shadow: rgba(0, 0, 0, 0.5) 0 1em 3em; /* 悬停时添加阴影效果 */
+    transition: all 0.2s ease; /* 平滑过渡 */
   }
 
   body[theme="dark"] .toolbox span:hover i {
@@ -392,6 +662,7 @@
 
   body[theme="dark"] footer.container-fluid a:hover {
     color: rgb(73, 146, 255); /* 悬停时链接颜色变为蓝色 */
+    transition: all 0.2s ease; /* 平滑过渡 */
   }
 </style>
 
@@ -427,8 +698,8 @@
           endDate: new Date("2025-09-04T00:00:00+08:00"),
           amount: "//这里写入你的价格 CNY / Annually",
           link: "//这里写入你的链接",
-        },
-      }; // 前面写入你的到期时间，格式不要修改
+        }, // 前面写入你的到期时间，格式不要修改
+      };
 
       const createCountdown = (startDate, endDate) => {
         const $countdown = document.createElement("div");
@@ -491,17 +762,13 @@
             $countdownTime.innerHTML = `
     <span class="days">${days} Day</span>
     <span class="time">
-      <span class="hours">${hours.toString().padStart(2, "0")}:</span>
-      <span class="minutes">${minutes.toString().padStart(2, "0")}:</span>
-      <span class="seconds">${seconds.toString().padStart(2, "0")}</span>
+      <span class="hours">${hours.toString().padStart(2, "0")}:</span><span class="minutes">${minutes.toString().padStart(2, "0")}:</span><span class="seconds">${seconds.toString().padStart(2, "0")}</span>
     </span>
   `;
           } else {
             $countdownTime.innerHTML = `
     <span class="time">
-      <span class="hours">${hours.toString().padStart(2, "0")}:</span>
-      <span class="minutes">${minutes.toString().padStart(2, "0")}:</span>
-      <span class="seconds">${seconds.toString().padStart(2, "0")}</span>
+      <span class="hours">${hours.toString().padStart(2, "0")}:</span><span class="minutes">${minutes.toString().padStart(2, "0")}:</span><span class="seconds">${seconds.toString().padStart(2, "0")}</span>
     </span>
   `;
           }
