@@ -16,7 +16,7 @@
   });
 </script>
 <style>
-  /* 强制隐藏指定的导航菜单、页脚文本以及图像元素 */
+ /* 强制隐藏指定的导航菜单、页脚文本以及图像元素 */
   .right.menu > a,  /* 隐藏右侧菜单中的链接 */
 .footer .is-size-7,  /* 隐藏页脚的小字号文本 */
 .item img {
@@ -179,13 +179,14 @@
     border: none; /* 移除边框 */
   }
 
-  /* 明亮模式下的下拉菜单样式 */
-  body[theme="light"] .navbar .dropdown-menu {
-    background-color: rgba(255, 255, 255, 0.3); /* 半透明背景色 */
-    backdrop-filter: blur(2px); /* 背景模糊效果 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
-  }
+/* 明亮模式下的下拉菜单样式 */
+body[theme="light"] .navbar .dropdown-menu {
+  background-color: rgba(255, 255, 255, 0.3); /* 半透明背景色 */
+  backdrop-filter: blur(2px); /* 添加背景模糊效果 */
+  -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
+}
+
 
   /* 明亮模式导航栏按钮样式 */
   body[theme="light"] .navbar-nav > li > a,
@@ -303,13 +304,13 @@
     border: none; /* 移除默认边框 */
   }
 
-  /* 深色模式的下拉菜单样式 */
-  body[theme="dark"] .navbar .dropdown-menu {
-    background-color: rgba(0, 0, 0, 0.5); /* 设置下拉菜单背景色为半透明黑色 */
-    backdrop-filter: blur(2px); /* 模糊效果，提升层次感 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
-  }
+/* 深色模式的下拉菜单样式 */
+body[theme="dark"] .navbar .dropdown-menu {
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明背景色 */
+  backdrop-filter: blur(2px); /* 添加背景模糊效果 */
+  -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
+}
 
   /* 深色模式的按钮样式 */
   body[theme="dark"] .navbar-nav > li > a,
@@ -318,13 +319,13 @@
     color: rgba(255, 255, 255, 0.8); /* 按钮文字颜色为半透明白色 */
   }
 
-  /* 深色模式的按钮悬停效果 */
-  body[theme="dark"] .navbar-nav > li > a:hover,
-  body[theme="dark"] .dropdown-menu li a:hover {
-    background-color: rgba(0, 0, 0, 0.2); /* 悬停时背景色为半透明黑色 */
-    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
-    color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
-  }
+/* 深色模式的按钮悬停效果 */
+body[theme="dark"] .navbar-nav > li > a:hover,
+body[theme="dark"] .dropdown-menu li a:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* 设置悬停时的背景色为半透明白色，增加透明度 */
+  box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
+  color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
+}
 
   /* 深色模式的表格的透明背景 */
   body[theme="dark"] .table,
