@@ -1,21 +1,17 @@
 <!-- ！！！仅支持 ServerStatus 主题！！！注释由 AI 编写，仅供参考！！！ -->
-<!-- 更新时间：2024-10-13 21:47:24 -->
-<!-- 原作者：@AriesJon   原贴：https://www.nodeseek.com/post-165736-1-->
+<!-- 更新时间：2024-10-12 19:11:41 -->
+<!-- 原作者：https://t.me/musicclub1563 -->
 <!-- 在此感谢原作者 -->
-<!-- 个性化设置：(1)探针Logo  (2)全局背景  (3)全局字体  (4)光标特效   (5)设备的购买、到期时间、价格、官网地址 -->
-<!-- 二改作者(俩小白)：(1）@cuteysking   (1)@musicclub1563 -->
-<!-- 效果预览(全是免费🐔哈哈哈)：https://nezha.996977.xyz/ -->
-<!-- 二改说明：增加半成品模糊效果，全局字体，光标特效，按钮特效；优化若干细节，修复若干 Bug -->
+<!-- 个性化设置：(1）探针Logo  （2）全局背景  （3）全局字体  （4）光标特效   (5）设备的购买、到期时间、价格、官网地址 -->
+<!-- 重构：https://t.me/cuteysking -->
+<!-- 重构说明：增加半成品模糊效果，增加按钮特效，精简代码，优化若干细节，修复若干 Bug -->
 <!-- 已知错误：下拉框无模糊效果，原因为".navbar"类与".navbar .dropdown-menu"类冲突，本人能力不足暂时无法修改 -->
-<!-- 如果有精简或者修复的建议，欢迎联系与贡献！ -->
- 
 <script>
   // 更改首页logo，在""中填入你的Logo URL
   window.addEventListener("DOMContentLoaded", (event) => {
     var logo = document.querySelector(".navbar-brand img");
     if (logo) {
-      logo.src =
-        ""; // 将此处的 URL 替换为你的Logo URL
+      logo.src = ""; // 将此处的 URL 替换为你的Logo URL
     }
   });
 </script>
@@ -155,26 +151,24 @@
     if (!("ontouchstart" in window || navigator.msMaxTouchPoints)) init();
   })();
 </script>
-
 <!-- 导入字体 -->
 <link
   rel="stylesheet"
   href="https://registry.npmmirror.com/lxgw-wenkai-screen-web/1.330.1/files/style.css"
 />
-
 <style>
   /* 强制隐藏指定的导航菜单、页脚文本以及图像元素 */
   .right.menu > a,  /* 隐藏右侧菜单中的链接 */
-  .footer .is-size-7,  /* 隐藏页脚的小字号文本 */
-  .item img {
+.footer .is-size-7,  /* 隐藏页脚的小字号文本 */
+.item img {
     /* 隐藏 item 中的图像 */
     display: none !important; /* 使用 !important 确保样式生效 */
   }
 
   /* 设置全局背景图片 */
   body {
-    background: url(https://api.miaomc.cn/image/get)
-      center center no-repeat fixed !important; /* 背景图固定在页面中央 */
+    background: url(https://api.miaomc.cn/image/get) center center no-repeat
+      fixed !important; /* 背景图固定在页面中央 */
     background-size: cover !important; /* 背景图覆盖整个页面 */
     min-height: 100vh; /* 保证背景图至少覆盖整个视口高度 */
     margin: 0; /* 移除 body 的默认外边距 */
@@ -191,7 +185,7 @@
       Droid Sans Fallback,
       Microsoft YaHei,
       sans-serif !important;
-    font-weight: 500; /* 字体粗细 */
+    font-weight: 550; /* 字体粗细 */
   }
   /* 针对宽度小于 1499px 的设备进行样式调整 */
   @media (max-width: 1499px) {
@@ -251,14 +245,31 @@
       font-size: 1em !important; /* 恢复倒计时字体大小 */
     }
 
-    /* 调整标题大小 */
-    .navbar-brand {
-      font-size: 1.3em !important; /* 缩小标题字体 */
-      white-space: nowrap;
+    /* 调整卡片内容的标题位置 */
+    .ui.card > .content > .header:not(.ui),
+    .ui.cards > .card > .content > .header:not(.ui) {
+      margin-top: 0.4em !important; /* 增加标题上方间距 */
+      font-size: 1.2em !important; /* 缩小标题字体 */
     }
   }
-  .node-cell {
-    white-space: nowrap; /* 禁止换行 */
+
+  /* 针对超小屏幕（宽度小于 480px）进行样式调整 */
+  @media (max-width: 480px) {
+    .ui.container {
+      width: 100% !important; /* 容器宽度调整为 100% */
+      padding: 0 10px !important; /* 缩小内边距 */
+    }
+
+    body {
+      background-position: center center !important; /* 背景居中显示 */
+      background-size: cover !important; /* 确保背景始终覆盖全屏 */
+    }
+
+    /* 调整超小屏幕下卡片标题的字体大小 */
+    .ui.card > .content > .header:not(.ui),
+    .ui.cards > .card > .content > .header:not(.ui) {
+      font-size: 1.2em !important; /* 缩小标题字体 */
+    }
   }
 
   /* 登录按钮样式 */
@@ -293,41 +304,6 @@
     background-color: #000 !important; /* 进度条背景颜色 */
   }
 
-  /* 价格标签通用的样式 */
-  .ui.renewal-label {
-    min-height: 20px;
-    padding: 0 0.5em;
-    line-height: 20px;
-    height: 20px;
-    font-size: 0.8em !important;
-    font-weight: normal;
-  }
-
-  /* 续费按钮的样式 */
-  .ui.green.button,
-  .ui.green.buttons .button {
-    min-height: 20px;
-    padding: 0 5px;
-    line-height: 20px;
-    background-color: #21ba45;
-    color: #ffffff;
-    font-size: 1em !important;
-    font-family: inherit !important;
-    font-weight: normal;
-  }
-  /* 续费按钮的悬停效果 */
-  .ui.green.button:hover,
-  .ui.green.buttons .button:hover {
-    background-color: #16ab39;
-    box-shadow: #16ab39 0 1em 2em;
-    transition: all 0.2s ease; /* 平滑过渡 */
-  }
-
-  /* 网络页面字体 */
-  .container .chartbox {
-    font-family: inherit !important;
-  }
-
   /* 弹出卡片样式 */
   .ui.right.center.popup {
     margin: -3px 0 0 0.914286em !important; /* 调整弹出框的边距 */
@@ -340,7 +316,7 @@
   /* 明亮模式的全局样式设置 */
   body[theme="light"] {
     margin: 0; /* 清除默认外边距 */
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* 设置优雅的字体系列 */
     background: rgba(255, 255, 255, 0.25); /* 背景色为半透明白色 */
     color: #333; /* 文字颜色设置为深灰色 */
     position: relative; /* 设置相对定位 */
@@ -364,12 +340,12 @@
 
   /* 明亮模式的导航栏按钮悬停效果 */
   body[theme="light"] .navbar-nav > li > a:hover {
-    background-color: #ffffff33 !important; /* 悬停时背景色变为半透明白色 */
+    background-color: rgba(255, 255, 255, 0.2) !important; /* 悬停时背景色变为半透明白色 */
     background-image: linear-gradient(
       rgba(255, 255, 255, 0.2) 0,
       rgba(255, 255, 255, 0.2) 100%
     ) !important;
-    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em;
+    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
     color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
     transition: all 0.2s ease; /* 平滑过渡 */
   }
@@ -389,7 +365,7 @@
       rgba(255, 255, 255, 0.2) 0,
       rgba(255, 255, 255, 0.2) 100%
     ) !important;
-    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em;
+    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
     color: rgb(73, 146, 255) !important; /* 悬停时文字颜色变为蓝色 */
     border-radius: 5px; /* 圆角效果 */
     transition: all 0.2s ease; /* 平滑过渡 */
@@ -416,13 +392,6 @@
   body[theme="light"] .table-striped tbody > tr.odd > th:hover,
   body[theme="light"] .table-striped tbody > tr.expandRow:hover {
     background-color: transparent !important; /* 确保表格背景透明，展示下层内容 */
-  }
-
-  /* 明亮模式的金额标签样式 */
-  body[theme="light"] .ui.renewal-label {
-    background-image: none; /* 移除背景图像 */
-    background-color: transparent; /* 设置背景为全透明 */
-    border: 1px solid rgba(0, 0, 0, 0.2); /* 添加边框，颜色和透明度可以根据需要调整 */
   }
 
   /* 明亮模式的网络监控下拉菜单样式 */
@@ -453,7 +422,7 @@
   /* 明亮模式的网络监控下拉项链接悬停效果 */
   body[theme="light"] .dropdown-menu li a:hover {
     background-color: rgba(255, 255, 255, 0.35); /* 悬停时背景色变为半透明白色 */
-    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em;
+    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
     color: rgb(0, 123, 255); /* 悬停时文字颜色变为蓝色 */
     transition: all 0.2s ease; /* 平滑过渡 */
   }
@@ -496,7 +465,7 @@
   /* 明亮模式下工具按钮悬停效果 */
   body[theme="light"] .toolbox span:hover {
     background-color: rgba(255, 255, 255, 0.2); /* 悬停时背景颜色变为半透明白色 */
-    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em;
+    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
     transition: all 0.2s ease; /* 平滑过渡 */
   }
 
@@ -553,7 +522,7 @@
       rgba(0, 0, 0, 0.2) 0,
       rgba(0, 0, 0, 0.2) 100%
     ) !important;
-    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
     color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
     transition: all 0.2s ease; /* 平滑过渡 */
   }
@@ -573,7 +542,7 @@
       rgba(0, 0, 0, 0.2) 0,
       rgba(0, 0, 0, 0.2) 100%
     ) !important;
-    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
     color: rgb(73, 146, 255) !important; /* 悬停时文字颜色变为蓝色 */
     border-radius: 5px; /* 圆角效果 */
     transition: all 0.3s ease; /* 平滑过渡 */
@@ -600,14 +569,6 @@
   body[theme="dark"] .table-striped tbody > tr.odd > th:hover,
   body[theme="dark"] .table-striped tbody > tr.expandRow:hover {
     background-color: transparent !important; /* 确保表格背景透明，突出显示下层内容 */
-  }
-
-  /* 深色模式的金额标签样式 */
-  body[theme="dark"] .ui.renewal-label {
-    background-image: none; /* 移除背景图像 */
-    background-color: transparent; /* 设置背景为全透明 */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* 添加白色边框，颜色和透明度可以根据需要调整 */
-    color: rgba(255, 255, 255, 0.8); /* 根据需要调整文字颜色，以确保可读性 */
   }
 
   /* 深色模式的网络监控下拉菜单样式 */
@@ -639,7 +600,7 @@
   /* 深色模式的网络监控下拉项链接悬停效果 */
   body[theme="dark"] .dropdown-menu li a:hover {
     background-color: rgba(0, 0, 0, 0.35); /* 悬停时背景色变为半透明白色 */
-    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em;
+    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em; /* 悬停时添加阴影效果 */
     color: rgb(0, 123, 255); /* 悬停时文字颜色变为蓝色 */
     transition: all 0.2s ease; /* 平滑过渡 */
   }
@@ -682,7 +643,7 @@
   /* 深色模式的工具按钮悬停效果 */
   body[theme="dark"] .toolbox span:hover {
     background-color: rgba(28, 29, 38, 0.5); /* 悬停时背景颜色变为更深的半透明黑色 */
-    box-shadow: rgba(0, 0, 0, 0.5) 0 1em 3em;
+    box-shadow: rgba(0, 0, 0, 0.5) 0 1em 3em; /* 悬停时添加阴影效果 */
     transition: all 0.2s ease; /* 平滑过渡 */
   }
 
@@ -709,7 +670,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     try {
       var downtimeCells = document.querySelectorAll("th.node-cell.os.center");
-      if (!downtimeCells) throw new Error("找不到系统列");
+      if (!downtimeCells) throw new Error("找不到表头列");
 
       downtimeCells.forEach(function (cell) {
         var newTh = document.createElement("th");
@@ -768,8 +729,8 @@
         $countdownTime.style.alignItems = "center";
         $countdownTime.style.justifyContent = "space-between";
         $countdownTime.style.color = "#fff";
-        $countdownTime.style.fontWeight = "normal";
-        $countdownTime.style.fontSize = "0.9em";
+        $countdownTime.style.fontWeight = "bold";
+        $countdownTime.style.fontSize = "inherit";
         $countdownTime.style.textShadow = "1px 1px 2px rgba(0,0,0,0.7)";
         $countdownTime.style.padding = "0 7.5px";
 
@@ -864,14 +825,21 @@
 
         // Function to update the cell content based on the current theme
         const updateCellContent = () => {
-          const labelClass = "label-style";
+          const isDarkTheme =
+            document.body.getAttribute("theme") === "dark" ||
+            document.body.classList.contains("dark-theme") ||
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+          const labelStyle = isDarkTheme
+            ? "background-color: rgba(255, 255, 255, 0.1); color: #ffffff;"
+            : "background-color: rgba(0, 0, 0, 0); color: #000000;";
 
           renewalCell.innerHTML = `
-        <div class="ui basic label mini renewal-label ${labelClass}">
-            ${amountText}
-        </div>
-        <a class="ui icon button mini green renewal-button" href="${link}" target="_blank">续费</a>
-    `;
+                    <div class="ui basic label mini" style="min-height: 20px; padding: 0 .5em; height: 20px; font-weight: normal; line-height: 20px; font-size: .78571429rem; ${labelStyle}">
+                        ${amountText}
+                    </div>
+                    <a class="ui icon button mini green" href="${link}" target="_blank" style="min-height: 20px; padding: 0 5px; line-height: 20px; background-color: #21ba45; color: #ffffff;">续费</a>
+                `;
         };
 
         // Initial update
