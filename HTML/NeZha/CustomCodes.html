@@ -1,14 +1,14 @@
 <!-- ！！！仅支持 ServerStatus 主题！！！注释由 AI 编写，仅供参考！！！ -->
-<!-- 更新时间：2024-10-14 07:34:48 -->
+<!-- 更新时间：2024-11-02 02:31:21 -->
 <!-- 原作者：@AriesJon   原贴：https://www.nodeseek.com/post-165736-1 -->
 <!-- 在此感谢原作者 -->
 <!-- 个性化设置：(1)探针Logo  (2)全局背景  (3)全局字体  (4)光标特效   (5)设备的购买、到期时间、价格、官网地址 -->
-<!-- 二改作者(俩小白)：(1）@cuteysking   (1)@musicclub1563 -->
+<!-- 二改作者(俩小白)：(1）@CuteysKing   (1)@musicclub1563 -->
 <!-- 效果预览(全是免费🐔哈哈哈)：https://nezha.996977.xyz/ -->
 <!-- 二改说明：增加半成品模糊效果，全局字体，光标特效，按钮特效；优化若干细节，修复若干 Bug -->
 <!-- 已知错误：下拉框无模糊效果，原因为".navbar"类与".navbar .dropdown-menu"类冲突，本人能力不足暂时无法修改 -->
 <!-- 如果有精简或者修复的建议，欢迎联系与贡献！ -->
- 
+
 <script>
   // 更改首页logo，在""中填入你的Logo URL
   window.addEventListener("DOMContentLoaded", (event) => {
@@ -18,6 +18,8 @@
         ""; // 将此处的 URL 替换为你的Logo URL
     }
   });
+  //server-status 主题开启半透明模式
+  localStorage.setItem("semiTransparent", true);
 </script>
 
 <!-- 导入字体 -->
@@ -27,23 +29,17 @@
 />
 
 <style>
-  /* 强制隐藏指定的导航菜单、页脚文本以及图像元素 */
-  .right.menu > a,  /* 隐藏右侧菜单中的链接 */
-  .footer .is-size-7,  /* 隐藏页脚的小字号文本 */
-  .item img {
-    /* 隐藏 item 中的图像 */
-    display: none !important; /* 使用 !important 确保样式生效 */
+  /* 设置全局背景图片 */
+  body[theme="dark"]::before {
+    /*自定义深色模式背景图*/
+    background-image: url(https://api.miaomc.cn/image/get);
   }
 
-  /* 设置全局背景图片 */
-  body {
-    background: url(https://api.miaomc.cn/image/get)
-      center center no-repeat fixed !important; /* 背景图固定在页面中央 */
-    background-size: cover !important; /* 背景图覆盖整个页面 */
-    min-height: 100vh; /* 保证背景图至少覆盖整个视口高度 */
-    margin: 0; /* 移除 body 的默认外边距 */
-    padding: 0; /* 移除 body 的默认内边距 */
+  body[theme="light"]::before {
+    /*自定义浅色模式背景图*/
+    background-image: url(https://api.miaomc.cn/image/get);
   }
+
   /* 全局字体样式修改 */
   body,
   #post-content,
@@ -57,104 +53,79 @@
       sans-serif !important;
     font-weight: 500; /* 字体粗细 */
   }
+
   /* 针对宽度小于 1499px 的设备进行样式调整 */
   @media (max-width: 1499px) {
     .countdown .time {
-      display: none !important; /* 隐藏倒计时中的小时、分钟和秒 */
+      display: none !important;
     }
     .countdown .days {
-      text-align: center !important; /* 天数文字居中 */
-      width: 100% !important; /* 使天数占据全部宽度 */
+      text-align: center !important;
+      width: 100% !important;
     }
   }
 
   /* 针对超大屏幕（宽度 >= 1200px）调整容器宽度 */
   @media (min-width: 1200px) {
     .ui.container {
-      width: 90% !important; /* 容器宽度调整为 90% */
+      width: 90% !important;
     }
   }
 
   /* 针对平板设备（宽度在 768px 到 1199px 之间）适配 */
   @media (min-width: 768px) and (max-width: 1199px) {
     .ui.container {
-      width: 95% !important; /* 容器宽度调整为 95% */
+      width: 95% !important;
     }
-
     body {
-      background-position: top center !important; /* 背景在平板设备上居中显示 */
+      background-position: top center !important;
     }
-
     .countdown {
-      font-size: 0.9em !important; /* 倒计时字体缩小 */
+      font-size: 0.9em !important;
     }
   }
 
   /* 针对宽度小于 768px 的设备进行样式调整 */
   @media (max-width: 767px) {
     .ui.container {
-      width: 100% !important; /* 容器宽度调整为 100% */
-      padding: 0 15px !important; /* 增加左右内边距 */
+      width: 100% !important;
+      padding: 0 15px !important;
     }
-
     body {
-      background-position: center center !important; /* 背景在手机设备上居中显示 */
-      background-size: cover !important; /* 确保背景图覆盖整个视口 */
+      background-position: center center !important;
+      background-size: cover !important;
     }
-
     .countdown .time {
-      display: inline !important; /* 显示倒计时中的小时、分钟和秒 */
+      display: inline !important;
     }
-
     .countdown .days {
-      text-align: left !important; /* 天数左对齐 */
-      width: auto !important; /* 取消天数的全宽显示 */
+      text-align: left !important;
+      width: auto !important;
     }
-
     .countdown {
-      font-size: 1em !important; /* 恢复倒计时字体大小 */
+      font-size: 1em !important;
     }
-
-    /* 调整标题大小 */
     .navbar-brand {
-      font-size: 1.3em !important; /* 缩小标题字体 */
+      font-size: 1.3em !important;
       white-space: nowrap;
     }
   }
   .node-cell {
-    white-space: nowrap; /* 禁止换行 */
-  }
-
-  /* 登录按钮样式 */
-  .nezha-primary-btn {
-    background-color: transparent !important; /* 透明背景 */
-    color: #000 !important; /* 黑色文字 */
-  }
-
-  /* 大卡片样式 */
-  #app .ui.fluid.accordion {
-    background-color: #fbfbfb26 !important; /* 半透明背景 */
-    border-radius: 0.4rem !important; /* 圆角 */
-  }
-
-  /* 小卡片样式 */
-  .ui.four.cards > .card {
-    border-radius: 0.6rem !important; /* 增加圆角 */
-    background-color: #fafafaa3 !important; /* 半透明背景 */
+    white-space: nowrap;
   }
 
   /* 进度条样式 */
   .ui.progress {
-    border-radius: 50rem !important; /* 圆形进度条 */
+    border-radius: 50rem !important;
   }
   .ui.progress .bar {
-    min-width: 1.8em !important; /* 设置最小宽度 */
-    border-radius: 15px !important; /* 进度条边角圆滑 */
-    line-height: 1.65em !important; /* 进度条的行高 */
-    color: black; /* 进度条文字颜色 */
+    min-width: 1.8em !important;
+    border-radius: 15px !important;
+    line-height: 1.65em !important;
+    color: black;
   }
   .ui.progress > .bar {
-    background-color: #000 !important; /* 进度条背景颜色 */
+    background-color: #000 !important;
   }
 
   /* 价格标签通用的样式 */
@@ -183,8 +154,8 @@
   .ui.green.button:hover,
   .ui.green.buttons .button:hover {
     background-color: #16ab39;
-    box-shadow: #16ab39 0 1em 2em;
-    transition: all 0.2s ease; /* 平滑过渡 */
+    box-shadow: rgba(22, 171, 57, 0.5) 0 0.5em 1em;
+    transition: all 0.1s ease;
   }
 
   /* 网络页面字体 */
@@ -192,380 +163,204 @@
     font-family: inherit !important;
   }
 
-  /* 弹出卡片样式 */
-  .ui.right.center.popup {
-    margin: -3px 0 0 0.914286em !important; /* 调整弹出框的边距 */
-    -webkit-transform-origin: left 50% !important; /* 设置弹出框的动画原点 */
-    transform-origin: left 50% !important; /* 保持一致的动画原点 */
-  }
+  /* ！！！！！！！浅色模式！！！！！！！ */
 
-  /* ！！！！！！！明亮模式！！！！！！！ */
-
-  /* 明亮模式的全局样式设置 */
+  /* 浅色模式的全局样式设置 */
   body[theme="light"] {
-    margin: 0; /* 清除默认外边距 */
+    margin: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background: rgba(255, 255, 255, 0.25); /* 背景色为半透明白色 */
-    color: #333; /* 文字颜色设置为深灰色 */
-    position: relative; /* 设置相对定位 */
-    overflow-x: hidden; /* 隐藏横向溢出的内容 */
+    background: rgba(255, 255, 255, 0.25);
+    color: #333;
+    position: relative;
+    overflow-x: hidden;
   }
 
-  /* 明亮模式的导航栏样式 */
-  body[theme="light"] .navbar {
-    background-color: rgba(255, 255, 255, 0.25); /* 半透明背景色 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 背景模糊效果*/
-    box-shadow: rgba(0, 0, 0, 0.25) 0 2px 5px; /* 添加阴影效果，增强立体感 */
-    border: none; /* 移除边框 */
-  }
-
-  /* 明亮模式的导航栏与下拉菜单按钮样式 */
-  body[theme="light"] .navbar-nav > li > a,
-  body[theme="light"] .navbar .dropdown-menu li a {
-    border-radius: 5px; /* 圆角效果，提升美观 */
-  }
-
-  /* 明亮模式的导航栏按钮悬停效果 */
-  body[theme="light"] .navbar-nav > li > a:hover {
-    background-color: #ffffff33 !important; /* 悬停时背景色变为半透明白色 */
-    background-image: linear-gradient(
-      rgba(255, 255, 255, 0.2) 0,
-      rgba(255, 255, 255, 0.2) 100%
-    ) !important;
-    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em;
-    color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
-    transition: all 0.2s ease; /* 平滑过渡 */
-  }
-
-  /* 明亮模式的下拉菜单样式 */
-  body[theme="light"] .navbar .dropdown-menu {
-    background-color: rgba(255, 255, 255, 0.5) !important; /* 半透明背景色 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 背景模糊效果 */
-    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
-  }
-
-  /* 明亮模式的下拉菜单按钮悬停效果 */
-  body[theme="light"] .navbar .dropdown-menu li a:hover {
-    background-color: rgba(255, 255, 255, 0.2) !important; /* 悬停时背景色为半透明白色 */
-    background-image: linear-gradient(
-      rgba(255, 255, 255, 0.2) 0,
-      rgba(255, 255, 255, 0.2) 100%
-    ) !important;
-    box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em;
-    color: rgb(73, 146, 255) !important; /* 悬停时文字颜色变为蓝色 */
-    border-radius: 5px; /* 圆角效果 */
-    transition: all 0.2s ease; /* 平滑过渡 */
-  }
-
-  /* 明亮模式的表格的透明背景 */
-  body[theme="light"] .table,
-  body[theme="light"] .table > thead > tr,
-  body[theme="light"] .table > thead > tr > th,
-  body[theme="light"] .table > tbody > tr,
-  body[theme="light"] .table > tbody > tr > td,
-  body[theme="light"] .table-condensed > tbody > tr,
-  body[theme="light"] .table-hover > tbody > tr,
-  body[theme="light"] .table-hover > tbody > tr:hover,
-  body[theme="light"] .table-striped tbody > tr.even,
-  body[theme="light"] .table-striped tbody > tr.odd,
-  body[theme="light"] .table-striped tbody > tr.even > td,
-  body[theme="light"] .table-striped tbody > tr.even > th,
-  body[theme="light"] .table-striped tbody > tr.odd > td,
-  body[theme="light"] .table-striped tbody > tr.odd > th,
-  body[theme="light"] .table-striped tbody > tr.even > td:hover,
-  body[theme="light"] .table-striped tbody > tr.even > th:hover,
-  body[theme="light"] .table-striped tbody > tr.odd > td:hover,
-  body[theme="light"] .table-striped tbody > tr.odd > th:hover,
-  body[theme="light"] .table-striped tbody > tr.expandRow:hover {
-    background-color: transparent !important; /* 确保表格背景透明，展示下层内容 */
-  }
-
-  /* 明亮模式的金额标签样式 */
-  body[theme="light"] .ui.renewal-label {
-    background-image: none; /* 移除背景图像 */
-    background-color: transparent; /* 设置背景为全透明 */
-    border: 1px solid rgba(0, 0, 0, 0.2); /* 添加边框，颜色和透明度可以根据需要调整 */
-  }
-
-  /* 明亮模式的网络监控下拉菜单样式 */
-  body[theme="light"] .dropdown-menu {
-    background-color: rgba(255, 255, 255, 0.2); /* 半透明背景色 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 背景模糊效果 */
-    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px; /* 下拉菜单的阴影效果 */
-    border-radius: 5px; /* 圆角效果 */
-    padding: 10px 0; /* 内边距，上下 */
-  }
-
-  /* 明亮模式的网络监控输入框样式 */
+  /* 浅色模式的导航栏、内容区域和下拉菜单的样式 */
+  body[theme="light"] .navbar,
+  body[theme="light"] .content,
+  body[theme="light"] .dropdown-menu,
   body[theme="light"] #dropdown-search {
-    background-color: rgba(255, 255, 255, 0.5); /* 半透明背景色 */
-    border: 1px solid rgba(255, 255, 255); /* 边框颜色 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 背景模糊效果 */
-    border-radius: 5px; /* 圆角效果 */
-    transition: border-color 0.3s; /* 边框颜色变化的过渡效果 */
+    background-color: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(2px);
+    box-shadow: rgba(0, 0, 0, 0.4) 0 2px 5px;
+    border: none;
+    border-radius: 5px;
   }
-
-  /* 明亮模式的网络监控下拉项链接样式 */
+  body[theme="light"] .navbar .dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px;
+  }
+  body[theme="light"] .navbar-nav > li > a,
+  body[theme="light"] .navbar .dropdown-menu li a,
   body[theme="light"] .dropdown-menu li a {
-    color: rgb(0, 0, 0); /* 默认文字颜色 */
+    border-radius: 5px;
+    color: #000;
+    transition: all 0.1s ease;
   }
-
-  /* 明亮模式的网络监控下拉项链接悬停效果 */
+  /* 浅色模式的按钮悬停效果 */
+  body[theme="light"] .navbar-nav > li > a:hover,
+  body[theme="light"] .navbar .dropdown-menu li a:hover,
   body[theme="light"] .dropdown-menu li a:hover {
-    background-color: rgba(255, 255, 255, 0.35); /* 悬停时背景色变为半透明白色 */
+    background-color: rgba(255, 255, 255, 0.2);
     box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em;
-    color: rgb(0, 123, 255); /* 悬停时文字颜色变为蓝色 */
-    transition: all 0.2s ease; /* 平滑过渡 */
+    color: rgb(73, 146, 255) !important;
+    transition: all 0.1s ease;
   }
-
-  /* 明亮模式的网络监控选中项样式 */
+  /* 浅色模式的选中项图标样式 */
   body[theme="light"] .dropdown-menu li .check.icon {
-    margin-left: auto; /* 自动外边距，使其靠右 */
-    color: rgb(0, 123, 255); /* 选中项的图标颜色 */
+    margin-left: auto;
+    color: rgb(0, 123, 255) !important;
   }
 
-  /* 明亮模式的网络监控内容区域样式 */
-  body[theme="light"] .content {
-    background-color: rgba(255, 255, 255, 0.25); /* 设置半透明背景色 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 模糊背景效果，提升视觉效果 */
-    box-shadow: rgba(0, 0, 0, 0.25) 0 0.625em 2em; /* 添加阴影，提升层次感 */
-    border: none; /* 移除边框 */
+  /* 浅色模式的金额标签和进度条的样式 */
+  body[theme="light"] .ui.renewal-label,
+  body[theme="light"] .plan.bandwidth,
+  body[theme="light"] .plan.traffic,
+  body[theme="light"] .plan.ipv4,
+  body[theme="light"] .plan.ipv6 {
+    background-image: none;
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.2);
   }
-
-  /* 明亮模式下进度条样式 */
   body[theme="light"] .progress {
-    background-image: none; /* 移除背景图 */
-    background-color: rgba(0, 0, 0, 0.06); /* 设置背景颜色，降低透明度 */
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0.06);
   }
 
-  /* 明亮模式下工具箱按钮样式 */
+  /* 浅色模式的工具箱按钮样式及其悬停效果 */
   body[theme="light"] .toolbox span {
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 模糊效果，提升视觉效果 */
-    border-radius: 5px; /* 设置圆角效果 */
+    backdrop-filter: blur(2px);
+    border-radius: 5px;
+    transition: all 0.1s ease;
   }
-
-  /* 明亮模式下工具按钮图标样式 */
   body[theme="light"] .toolbox span i {
-    background-color: rgba(255, 255, 255, 0.25); /* 设置半透明背景 */
-    color: rgba(10, 10, 10, 0.8); /* 图标颜色为黑色 */
-    font-size: 24px; /* 设置图标大小 */
+    background-color: rgba(255, 255, 255, 0.25);
+    color: rgba(10, 10, 10, 0.8);
+    font-size: 24px;
   }
-
-  /* 明亮模式下工具按钮悬停效果 */
   body[theme="light"] .toolbox span:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* 悬停时背景颜色变为半透明白色 */
+    background-color: rgba(255, 255, 255, 0.2);
     box-shadow: rgba(255, 255, 255, 0.35) 0 1em 3em;
-    transition: all 0.2s ease; /* 平滑过渡 */
   }
-
   body[theme="light"] .toolbox span:hover i {
-    color: rgb(73, 146, 255); /* 悬停时图标颜色变为蓝色 */
-    transition: all 0.2s ease; /* 平滑过渡 */
+    color: rgb(73, 146, 255);
+    transition: all 0.1s ease;
   }
 
-  /* 明亮模式的版权样式 */
+  /* 浅色模式的版权样式 */
   body[theme="light"] footer.container-fluid {
-    color: #000000; /* 版权文本颜色为深灰色 */
+    color: #000;
   }
-
   body[theme="light"] footer.container-fluid a {
-    color: rgb(0, 0, 0); /* 版权链接颜色为黑色 */
+    color: #000;
+    transition: color 0.1s ease;
   }
-
   body[theme="light"] footer.container-fluid a:hover {
-    color: rgb(73, 146, 255); /* 悬停时链接颜色变为蓝色 */
-    transition: all 0.2s ease; /* 平滑过渡 */
+    color: rgb(73, 146, 255);
+    transition: all 0.1s ease;
   }
 
   /* ！！！！！！！深色模式！！！！！！！ */
 
   /* 深色模式的全局样式设置 */
   body[theme="dark"] {
-    margin: 0; /* 清除默认外边距，确保样式整洁 */
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* 设置字体为优雅的无衬线字体 */
-    background: rgba(0, 0, 0, 0.4); /* 深色背景色，透出下层内容 */
-    color: #ffffff; /* 设置文字颜色为白色，确保可读性 */
-    position: relative; /* 设置相对定位，以便子元素使用绝对定位 */
-    overflow-x: hidden; /* 隐藏横向溢出的内容 */
+    margin: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    position: relative;
+    overflow-x: hidden;
   }
 
-  /* 深色模式的导航栏样式 */
-  body[theme="dark"] .navbar {
-    background-color: rgba(0, 0, 0, 0.4); /* 设置导航栏的背景色为半透明黑色 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 添加模糊效果，增强层次感 */
-    box-shadow: rgba(0, 0, 0, 0.4) 0 2px 5px; /* 添加阴影，提升视觉效果 */
-    border: none; /* 移除默认边框 */
+  /* 深色模式的导航栏、内容区域和下拉菜单的样式 */
+  body[theme="dark"] .navbar,
+  body[theme="dark"] .content,
+  body[theme="dark"] .dropdown-menu,
+  body[theme="dark"] #dropdown-search {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    box-shadow: rgba(0, 0, 0, 0.4) 0 2px 5px;
+    border: none;
+    border-radius: 5px;
   }
-
-  /* 深色模式导航栏和下拉菜单的按钮样式 */
+  body[theme="dark"] .navbar .dropdown-menu {
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: rgba(255, 255, 255, 0.5) 0 2px 5px;
+  }
   body[theme="dark"] .navbar-nav > li > a,
-  body[theme="dark"] .navbar .dropdown-menu li a {
-    border-radius: 5px; /* 设置按钮圆角，提升美观度 */
+  body[theme="dark"] .navbar .dropdown-menu li a,
+  body[theme="dark"] .dropdown-menu li a {
+    border-radius: 5px;
+    color: #fff;
+    transition: all 0.1s ease;
   }
 
   /* 深色模式的按钮悬停效果 */
-  body[theme="dark"] .navbar-nav > li > a:hover {
-    background-color: rgba(0, 0, 0, 0.2) !important; /* 悬停时背景色为半透明黑色 */
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0.2) 0,
-      rgba(0, 0, 0, 0.2) 100%
-    ) !important;
-    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em;
-    color: rgb(73, 146, 255); /* 悬停时文字颜色变为蓝色 */
-    transition: all 0.2s ease; /* 平滑过渡 */
-  }
-
-  /* 深色模式的下拉菜单样式 */
-  body[theme="dark"] .navbar .dropdown-menu {
-    background-color: rgba(0, 0, 0, 0.5) !important; /* 设置下拉菜单背景色为半透明黑色 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 模糊效果，提升层次感 */
-    box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px; /* 下拉菜单的阴影效果 */
-  }
-
-  /* 深色模式的下拉菜单按钮悬停效果 */
-  body[theme="dark"] .navbar .dropdown-menu li a:hover {
-    background-color: rgba(0, 0, 0, 0.2) !important; /* 悬停时背景色为半透明白色 */
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0.2) 0,
-      rgba(0, 0, 0, 0.2) 100%
-    ) !important;
-    box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em;
-    color: rgb(73, 146, 255) !important; /* 悬停时文字颜色变为蓝色 */
-    border-radius: 5px; /* 圆角效果 */
-    transition: all 0.3s ease; /* 平滑过渡 */
-  }
-
-  /* 深色模式的表格的透明背景 */
-  body[theme="dark"] .table,
-  body[theme="dark"] .table > thead > tr,
-  body[theme="dark"] .table > thead > tr > th,
-  body[theme="dark"] .table > tbody > tr,
-  body[theme="dark"] .table > tbody > tr > td,
-  body[theme="dark"] .table-condensed > tbody > tr,
-  body[theme="dark"] .table-hover > tbody > tr,
-  body[theme="dark"] .table-hover > tbody > tr:hover,
-  body[theme="dark"] .table-striped tbody > tr.even,
-  body[theme="dark"] .table-striped tbody > tr.odd,
-  body[theme="dark"] .table-striped tbody > tr.even > td,
-  body[theme="dark"] .table-striped tbody > tr.even > th,
-  body[theme="dark"] .table-striped tbody > tr.odd > td,
-  body[theme="dark"] .table-striped tbody > tr.odd > th,
-  body[theme="dark"] .table-striped tbody > tr.even > td:hover,
-  body[theme="dark"] .table-striped tbody > tr.even > th:hover,
-  body[theme="dark"] .table-striped tbody > tr.odd > td:hover,
-  body[theme="dark"] .table-striped tbody > tr.odd > th:hover,
-  body[theme="dark"] .table-striped tbody > tr.expandRow:hover {
-    background-color: transparent !important; /* 确保表格背景透明，突出显示下层内容 */
-  }
-
-  /* 深色模式的金额标签样式 */
-  body[theme="dark"] .ui.renewal-label {
-    background-image: none; /* 移除背景图像 */
-    background-color: transparent; /* 设置背景为全透明 */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* 添加白色边框，颜色和透明度可以根据需要调整 */
-    color: rgba(255, 255, 255, 0.8); /* 根据需要调整文字颜色，以确保可读性 */
-  }
-
-  /* 深色模式的网络监控下拉菜单样式 */
-  body[theme="dark"] .dropdown-menu {
-    background-color: rgba(0, 0, 0, 0.2); /* 半透明背景色 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 背景模糊效果 */
-    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px; /* 下拉菜单的阴影效果 */
-    border-radius: 5px; /* 圆角效果 */
-    padding: 10px 0; /* 内边距，上下 */
-  }
-
-  /* 深色模式的网络监控输入框样式 */
-  body[theme="dark"] #dropdown-search {
-    background-color: rgba(0, 0, 0, 0.5); /* 半透明背景色 */
-    border: 1px solid rgb(0, 0, 0); /* 边框颜色 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 背景模糊效果 */
-    border-radius: 5px; /* 圆角效果 */
-    transition: border-color 0.3s; /* 边框颜色变化的过渡效果 */
-    transition: all 0.2s ease; /* 平滑过渡 */
-  }
-
-  /* 深色模式的网络监控下拉项链接样式 */
-  body[theme="dark"] .dropdown-menu li a {
-    color: white; /* 默认文字颜色 */
-  }
-
-  /* 深色模式的网络监控下拉项链接悬停效果 */
+  body[theme="dark"] .navbar-nav > li > a:hover,
+  body[theme="dark"] .navbar .dropdown-menu li a:hover,
   body[theme="dark"] .dropdown-menu li a:hover {
-    background-color: rgba(0, 0, 0, 0.35); /* 悬停时背景色变为半透明白色 */
+    background-color: rgba(0, 0, 0, 0.2) !important;
     box-shadow: rgba(0, 0, 0, 0.35) 0 1em 3em;
-    color: rgb(0, 123, 255); /* 悬停时文字颜色变为蓝色 */
-    transition: all 0.2s ease; /* 平滑过渡 */
+    color: rgb(73, 146, 255) !important;
+    transition: all 0.1s ease;
   }
-
-  /* 深色模式的网络监控选中项样式 */
+  /* 深色模式的选中项图标样式 */
   body[theme="dark"] .dropdown-menu li .check.icon {
-    margin-left: auto; /* 自动外边距，使其靠右 */
-    color: rgb(0, 123, 255); /* 选中项的图标颜色 */
+    margin-left: auto;
+    color: rgb(0, 123, 255) !important;
   }
-
-  /* 深色模式的内容区域样式 */
-  body[theme="dark"] .content {
-    background-color: rgba(0, 0, 0, 0.4); /* 设置内容区域为半透明黑色背景 */
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 背景模糊效果，增加视觉效果 */
-    box-shadow: rgba(0, 0, 0, 0.4) 0 0.625em 2em; /* 添加阴影，提升层次感 */
-    border: none; /* 移除边框 */
+  /* 深色模式的金额标签和进度条样式 */
+  body[theme="dark"] .ui.renewal-label,
+  body[theme="dark"] .plan.bandwidth,
+  body[theme="dark"] .plan.traffic,
+  body[theme="dark"] .plan.ipv4,
+  body[theme="dark"] .plan.ipv6 {
+    background-image: none;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
   }
-
-  /* 深色模式的进度条样式 */
   body[theme="dark"] .progress {
-    background-image: none; /* 移除背景图 */
-    background-color: rgba(255, 255, 255, 0.06); /* 设置背景色，降低透明度 */
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0.06);
   }
 
-  /* 深色模式的工具箱按钮样式 */
+  /* 深色模式的工具箱按钮样式及其悬停效果 */
   body[theme="dark"] .toolbox span {
-    -webkit-backdrop-filter: blur(2px); /* Safari 兼容性 */
-    backdrop-filter: blur(2px); /* 模糊效果，增加美观 */
-    border-radius: 5px; /* 设置圆角效果，提升外观 */
+    backdrop-filter: blur(2px);
+    border-radius: 5px;
+    transition: all 0.1s ease;
   }
 
-  /* 深色模式的工具按钮图标样式 */
   body[theme="dark"] .toolbox span i {
-    background-color: rgba(28, 29, 38, 0.4); /* 图标背景为半透明深色 */
-    color: rgba(255, 255, 255, 0.9); /* 图标颜色为白色，确保可见性 */
-    font-size: 24px; /* 设置图标大小 */
+    background-color: rgba(28, 29, 38, 0.4);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 24px;
   }
 
-  /* 深色模式的工具按钮悬停效果 */
   body[theme="dark"] .toolbox span:hover {
-    background-color: rgba(28, 29, 38, 0.5); /* 悬停时背景颜色变为更深的半透明黑色 */
+    background-color: rgba(28, 29, 38, 0.5);
     box-shadow: rgba(0, 0, 0, 0.5) 0 1em 3em;
-    transition: all 0.2s ease; /* 平滑过渡 */
   }
 
   body[theme="dark"] .toolbox span:hover i {
-    color: rgba(73, 146, 255, 1); /* 悬停时图标颜色变为蓝色 */
+    color: rgba(73, 146, 255, 1);
+    transition: all 0.1s ease;
   }
 
   /* 深色模式的版权样式 */
   body[theme="dark"] footer.container-fluid {
-    color: rgb(255, 255, 255); /* 版权文本颜色为白色 */
+    color: rgb(255, 255, 255);
   }
 
   body[theme="dark"] footer.container-fluid a {
-    color: rgb(255, 255, 255); /* 链接颜色为白色 */
+    color: rgb(255, 255, 255);
+    transition: color 0.1s ease;
   }
 
   body[theme="dark"] footer.container-fluid a:hover {
-    color: rgb(73, 146, 255); /* 悬停时链接颜色变为蓝色 */
-    transition: all 0.2s ease; /* 平滑过渡 */
+    color: rgb(73, 146, 255);
+    transition: all 0.1s ease;
   }
 </style>
 
@@ -640,7 +435,6 @@
         const updateCountdown = () => {
           const now = new Date();
           const totalDuration = endDate.getTime() - startDate.getTime();
-          const elapsedDuration = now.getTime() - startDate.getTime();
           const remainingDuration = endDate.getTime() - now.getTime();
 
           if (remainingDuration <= 0) {
@@ -659,24 +453,29 @@
             (remainingDuration % (1000 * 60 * 60)) / (1000 * 60),
           );
           const seconds = Math.floor((remainingDuration % (1000 * 60)) / 1000);
-          const progressPercent = (elapsedDuration / totalDuration) * 100;
+
+          const remainingPercent = (remainingDuration / totalDuration) * 100;
 
           if (days > 0) {
             $countdownTime.innerHTML = `
-    <span class="days">${days} Day</span>
-    <span class="time">
-      <span class="hours">${hours.toString().padStart(2, "0")}:</span><span class="minutes">${minutes.toString().padStart(2, "0")}:</span><span class="seconds">${seconds.toString().padStart(2, "0")}</span>
-    </span>
-  `;
+              <span class="days">${days} Day</span>
+              <span class="time">
+                  <span class="hours">${hours.toString().padStart(2, "0")}:</span>
+                  <span class="minutes">${minutes.toString().padStart(2, "0")}:</span>
+                  <span class="seconds">${seconds.toString().padStart(2, "0")}</span>
+              </span>
+          `;
           } else {
             $countdownTime.innerHTML = `
-    <span class="time">
-      <span class="hours">${hours.toString().padStart(2, "0")}:</span><span class="minutes">${minutes.toString().padStart(2, "0")}:</span><span class="seconds">${seconds.toString().padStart(2, "0")}</span>
-    </span>
-  `;
+              <span class="time">
+                  <span class="hours">${hours.toString().padStart(2, "0")}:</span>
+                  <span class="minutes">${minutes.toString().padStart(2, "0")}:</span>
+                  <span class="seconds">${seconds.toString().padStart(2, "0")}</span>
+              </span>
+          `;
           }
 
-          $progress.style.width = `${progressPercent}%`;
+          $progress.style.width = `${remainingPercent}%`;
         };
 
         updateCountdown();
@@ -726,22 +525,19 @@
         renewalCell.className = "node-cell buy";
         renewalCell.style.textAlign = "center";
 
-        // Function to update the cell content based on the current theme
         const updateCellContent = () => {
           const labelClass = "label-style";
 
           renewalCell.innerHTML = `
-        <div class="ui basic label mini renewal-label ${labelClass}">
-            ${amountText}
-        </div>
-        <a class="ui icon button mini green renewal-button" href="${link}" target="_blank">续费</a>
-    `;
+          <div class="ui basic label mini renewal-label ${labelClass}">
+              ${amountText}
+          </div>
+          <a class="ui icon button mini green renewal-button" href="${link}" target="_blank">续费</a>
+      `;
         };
 
-        // Initial update
         updateCellContent();
 
-        // Listen for theme changes
         const observer = new MutationObserver((mutations) => {
           mutations.forEach((mutation) => {
             if (
@@ -755,7 +551,6 @@
 
         observer.observe(document.body, { attributes: true });
 
-        // Also listen for system color scheme changes
         window
           .matchMedia("(prefers-color-scheme: dark)")
           .addListener(updateCellContent);
@@ -769,139 +564,89 @@
   });
 </script>
 
-<!-- 光标小星星拖尾跟随特效 -->
-<span class="js-cursor-container"></span>
-<script>
-  (function fairyDustCursor() {
-    var possibleColors = ["#D61C59", "#E7D84B", "#1B8798"];
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-    var cursor = { x: width / 2, y: width / 2 };
-    var particles = [];
-
-    function init() {
-      bindEvents();
-      loop();
+<!-- 网页点击爱心特效 - (可删除)-->
+<script type="text/javascript">
+  !(function (e, t, a) {
+    function r() {
+      for (var e = 0; e < s.length; e++)
+        s[e].alpha <= 0
+          ? (t.body.removeChild(s[e].el), s.splice(e, 1))
+          : (s[e].y--,
+            (s[e].scale += 0.004),
+            (s[e].alpha -= 0.013),
+            (s[e].el.style.cssText =
+              "left:" +
+              s[e].x +
+              "px;top:" +
+              s[e].y +
+              "px;opacity:" +
+              s[e].alpha +
+              ";transform:scale(" +
+              s[e].scale +
+              "," +
+              s[e].scale +
+              ") rotate(45deg);background:" +
+              s[e].color +
+              ";z-index:99999"));
+      requestAnimationFrame(r);
+    }
+    function n() {
+      var t = "function" == typeof e.onclick && e.onclick;
+      e.onclick = function (e) {
+        t && t(), o(e);
+      };
     }
 
-    // Bind events that are needed
-    function bindEvents() {
-      document.addEventListener("mousemove", onMouseMove);
-      window.addEventListener("resize", onWindowResize);
+    function o(e) {
+      var a = t.createElement("div");
+      (a.className = "heart"),
+        s.push({
+          el: a,
+          x: e.clientX - 5,
+          y: e.clientY - 5,
+          scale: 1,
+          alpha: 1,
+          color: c(),
+        }),
+        t.body.appendChild(a);
     }
 
-    function onWindowResize(e) {
-      width = window.innerWidth;
-      height = window.innerHeight;
+    function i(e) {
+      var a = t.createElement("style");
+      a.type = "text/css";
+      try {
+        a.appendChild(t.createTextNode(e));
+      } catch (t) {
+        a.styleSheet.cssText = e;
+      }
+      t.getElementsByTagName("head")[0].appendChild(a);
     }
 
-    function onMouseMove(e) {
-      cursor.x = e.clientX;
-      cursor.y = e.clientY;
-
-      addParticle(
-        cursor.x,
-        cursor.y,
-        possibleColors[Math.floor(Math.random() * possibleColors.length)],
+    function c() {
+      return (
+        "rgb(" +
+        ~~(255 * Math.random()) +
+        "," +
+        ~~(255 * Math.random()) +
+        "," +
+        ~~(255 * Math.random()) +
+        ")"
       );
     }
-
-    function addParticle(x, y, color) {
-      var particle = new Particle();
-      particle.init(x, y, color);
-      particles.push(particle);
-    }
-
-    function updateParticles() {
-      // Updated
-      for (var i = 0; i < particles.length; i++) {
-        particles[i].update();
-      }
-
-      // Remove dead particles
-      for (var i = particles.length - 1; i >= 0; i--) {
-        if (particles[i].lifeSpan < 0) {
-          particles[i].die();
-          particles.splice(i, 1);
-        }
-      }
-    }
-
-    function loop() {
-      requestAnimationFrame(loop);
-      updateParticles();
-    }
-
-    /**
-     * Particles
-     */
-
-    function Particle() {
-      this.character = "*";
-      this.lifeSpan = 120; //ms
-      this.initialStyles = {
-        position: "fixed",
-        display: "inline-block",
-        top: "0px",
-        left: "0px",
-        pointerEvents: "none",
-        "touch-action": "none",
-        "z-index": "10000000",
-        fontSize: "25px",
-        "will-change": "transform",
-      };
-
-      // Init, and set properties
-      this.init = function (x, y, color) {
-        this.velocity = {
-          x: (Math.random() < 0.5 ? -1 : 1) * (Math.random() / 2),
-          y: 1,
-        };
-
-        this.position = { x: x + 10, y: y + 10 };
-        this.initialStyles.color = color;
-
-        this.element = document.createElement("span");
-        this.element.innerHTML = this.character;
-        applyProperties(this.element, this.initialStyles);
-        this.update();
-
-        document
-          .querySelector(".js-cursor-container")
-          .appendChild(this.element);
-      };
-
-      this.update = function () {
-        this.position.x += this.velocity.x;
-        this.position.y += this.velocity.y;
-        this.lifeSpan--;
-
-        this.element.style.transform =
-          "translate3d(" +
-          this.position.x +
-          "px," +
-          this.position.y +
-          "px, 0) scale(" +
-          this.lifeSpan / 120 +
-          ")";
-      };
-
-      this.die = function () {
-        this.element.parentNode.removeChild(this.element);
-      };
-    }
-
-    /**
-     * Utils
-     */
-
-    // Applies css `properties` to an element.
-    function applyProperties(target, properties) {
-      for (var key in properties) {
-        target.style[key] = properties[key];
-      }
-    }
-
-    if (!("ontouchstart" in window || navigator.msMaxTouchPoints)) init();
-  })();
+    var s = [];
+    (e.requestAnimationFrame =
+      e.requestAnimationFrame ||
+      e.webkitRequestAnimationFrame ||
+      e.mozRequestAnimationFrame ||
+      e.oRequestAnimationFrame ||
+      e.msRequestAnimationFrame ||
+      function (e) {
+        setTimeout(e, 1e3 / 60);
+      }),
+      i(
+        ".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}",
+      ),
+      n(),
+      r();
+  })(window, document);
 </script>
