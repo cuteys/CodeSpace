@@ -83,11 +83,40 @@ init() {
     fi
 }
 
-# 检查并创建服务
+# 检查并创建服务（支持 Alpine 和其他 Linux 系统）
 create_service() {
-    if ! systemctl list-unit-files | grep -qw "nezha-agent.service"; then
-        echo "Creating nezha-agent service..."
-        cat <<EOF >/etc/systemd/system/nezha-agent.service
+    if [ -f /etc/alpine-release ]; then
+        # Alpine 使用 openrc 创建服务
+        if [ ! -f /etc/init.d/nezha-agent ]; then
+            echo "Creating nezha-agent service for Alpine..."
+            cat <<EOF >/etc/init.d/nezha-agent
+#!/bin/sh
+# Start/stop nezha-agent service
+case "\$1" in
+  start)
+    ${NZ_AGENT_BIN} &
+    ;;
+  stop)
+    killall nezha-agent
+    ;;
+  restart)
+    killall nezha-agent
+    ${NZ_AGENT_BIN} &
+    ;;
+  *)
+    echo "Usage: \$0 {start|stop|restart}"
+    exit 1
+esac
+EOF
+            chmod +x /etc/init.d/nezha-agent
+            success "Service nezha-agent created for Alpine."
+        fi
+        rc-update add nezha-agent default
+    else
+        # 对于非 Alpine 系统使用 systemd
+        if ! systemctl list-unit-files | grep -qw "nezha-agent.service"; then
+            echo "Creating nezha-agent service..."
+            cat <<EOF >/etc/systemd/system/nezha-agent.service
 [Unit]
 Description=哪吒监控 Agent
 After=network.target
@@ -102,9 +131,10 @@ User=root
 [Install]
 WantedBy=multi-user.target
 EOF
-        systemctl daemon-reload
-        systemctl enable nezha-agent
-        success "Service nezha-agent created and enabled."
+            systemctl daemon-reload
+            systemctl enable nezha-agent
+            success "Service nezha-agent created and enabled."
+        fi
     fi
 }
 
@@ -112,7 +142,7 @@ EOF
 stop_service() {
     echo "Stopping nezha-agent service..."
     if [ -f /etc/init.d/nezha-agent ]; then
-        rc-service nezha-agent stop
+        /etc/init.d/nezha-agent stop
     elif command -v systemctl >/dev/null 2>&1; then
         systemctl stop nezha-agent
     else
@@ -124,7 +154,7 @@ stop_service() {
 start_service() {
     echo "Starting nezha-agent service..."
     if [ -f /etc/init.d/nezha-agent ]; then
-        rc-service nezha-agent start
+        /etc/init.d/nezha-agent start
     elif command -v systemctl >/dev/null 2>&1; then
         systemctl start nezha-agent
     else
