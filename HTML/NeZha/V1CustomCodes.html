@@ -1,0 +1,284 @@
+<!-- ！！！仅支持 Official 主题！！！ -->
+<!-- 更新时间：2024-12-15 15:47:27 -->
+<!-- 作者：@ChuiYans -->
+<!-- 如果有精简或者修复的建议，欢迎联系与贡献！ -->
+
+<head>
+    <style>
+      /* IP公示区域 */
+      #result {
+        position: absolute;
+        top: 4.5%;
+        left: 50%;
+        height: 92px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateX(-50%);
+        text-align: center;
+        padding: 11px;
+        width: 250px;
+        line-height: 1.5;
+        z-index: 100;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+  
+      #result:hover {
+        --tw-ring-opacity: 1;
+        --tw-ring-color: rgb(255 105 180 / var(--tw-ring-opacity));
+      }
+  
+      @media (max-width: 770px) {
+        #result {
+          display: none;
+        }
+      }
+  
+      /* 雪花样式 */
+      /* 可定制的雪花造型 */
+      .snowflake {
+        color: #fff;
+        font-size: 1em;
+        font-family: Arial, sans-serif;
+        text-shadow: 0 0 5px #000;
+      }
+  
+      .snowflake,
+      .snowflake .inner {
+        animation-iteration-count: infinite;
+        animation-play-state: running;
+      }
+  
+      @keyframes snowflakes-fall {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(110vh);
+        }
+      }
+  
+      @keyframes snowflakes-shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(80px);
+        }
+      }
+  
+      /* 雪花的位置和动画 */
+      .snowflake {
+        position: fixed;
+        top: -10%;
+        z-index: 9999;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
+        animation-name: snowflakes-shake;
+        animation-duration: 3s;
+        animation-timing-function: ease-in-out;
+      }
+  
+      .snowflake .inner {
+        animation-duration: 10s;
+        animation-name: snowflakes-fall;
+        animation-timing-function: linear;
+      }
+  
+      /* 每个雪花的位置和动画延迟 */
+      .snowflake:nth-of-type(0) {
+        left: 1%;
+        animation-delay: 0s;
+      }
+      .snowflake:nth-of-type(0) .inner {
+        animation-delay: 0s;
+      }
+  
+      .snowflake:first-of-type {
+        left: 10%;
+        animation-delay: 1s;
+      }
+      .snowflake:first-of-type .inner,
+      .snowflake:nth-of-type(8) .inner {
+        animation-delay: 1s;
+      }
+  
+      .snowflake:nth-of-type(2) {
+        left: 20%;
+        animation-delay: 0.5s;
+      }
+      .snowflake:nth-of-type(2) .inner,
+      .snowflake:nth-of-type(6) .inner {
+        animation-delay: 6s;
+      }
+  
+      .snowflake:nth-of-type(3) {
+        left: 30%;
+        animation-delay: 2s;
+      }
+      .snowflake:nth-of-type(11) .inner,
+      .snowflake:nth-of-type(3) .inner {
+        animation-delay: 4s;
+      }
+  
+      .snowflake:nth-of-type(4) {
+        left: 40%;
+        animation-delay: 2s;
+      }
+      .snowflake:nth-of-type(10) .inner,
+      .snowflake:nth-of-type(4) .inner {
+        animation-delay: 2s;
+      }
+  
+      .snowflake:nth-of-type(5) {
+        left: 50%;
+        animation-delay: 3s;
+      }
+      .snowflake:nth-of-type(5) .inner {
+        animation-delay: 8s;
+      }
+  
+      .snowflake:nth-of-type(6) {
+        left: 60%;
+        animation-delay: 2s;
+      }
+  
+      .snowflake:nth-of-type(7) {
+        left: 70%;
+        animation-delay: 1s;
+      }
+      .snowflake:nth-of-type(7) .inner {
+        animation-delay: 2.5s;
+      }
+  
+      .snowflake:nth-of-type(8) {
+        left: 80%;
+        animation-delay: 0s;
+      }
+  
+      .snowflake:nth-of-type(9) {
+        left: 90%;
+        animation-delay: 1.5s;
+      }
+      .snowflake:nth-of-type(9) .inner {
+        animation-delay: 3s;
+      }
+  
+      .snowflake:nth-of-type(10) {
+        left: 25%;
+        animation-delay: 0s;
+      }
+  
+      .snowflake:nth-of-type(11) {
+        left: 65%;
+        animation-delay: 2.5s;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div
+      id="result"
+      class="border shadow-lg border ring-transparent bg-card font-bold break-all tracking-tight text-xs rounded-lg transition-all ring-1 hover:ring-pink-500 hover:ring-1 hover:shadow-pink-500/50 cursor-pointer shadow-neutral-200/40"
+      onclick="window.open('https://ping0.cc/', '_blank')"
+    >
+      <div>加载中...</div>
+    </div>
+  
+    <script type="text/javascript">
+      let timeout = setTimeout(function () {
+        document.getElementById("result").innerHTML = "获取IP失败";
+      }, 5000);
+  
+      function callback(ip, location, asn, org) {
+        clearTimeout(timeout);
+        var html = `${ip}<br/>${location}<br/>${asn}<br/>${org}<br/>`;
+        document.getElementById("result").innerHTML = html;
+      }
+    </script>
+  
+    <script
+      type="text/javascript"
+      src="https://ping0.cc/geo/jsonp/callback"
+    ></script>
+  
+    <div class="snowflakes" aria-hidden="true">
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+      <div class="snowflake">
+        <div class="inner">❅</div>
+      </div>
+    </div>
+  </body>
+  
