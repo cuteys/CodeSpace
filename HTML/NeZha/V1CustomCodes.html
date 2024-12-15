@@ -183,21 +183,16 @@
   <body>
     <div
       id="result"
-      class="border shadow-lg border ring-transparent bg-card font-bold break-all tracking-tight text-xs rounded-lg transition-all ring-1 hover:ring-pink-500 hover:ring-1 hover:shadow-pink-500/50 cursor-pointer shadow-neutral-200/40"
+      class="border shadow-lg border ring-transparent bg-card font-bold break-all tracking-tight text-xs rounded-lg transition-all ring-1 hover:ring-pink-500 hover:ring-1 hover:shadow-pink-500/50 cursor-pointer shadow-neutral-200/40 dark:shadow-none"
       onclick="window.open('https://ping0.cc/', '_blank')"
     >
       <div>加载中...</div>
     </div>
   
     <script type="text/javascript">
-      let timeout = setTimeout(function () {
-        document.getElementById("result").innerHTML = "获取IP失败";
-      }, 5000);
-  
       function callback(ip, location, asn, org) {
-        clearTimeout(timeout);
-        var html = `${ip}<br/>${location}<br/>${asn}<br/>${org}<br/>`;
-        document.getElementById("result").innerHTML = html;
+          var html = `${ip}<br/>${location}<br/>${asn}<br/>${org}<br/>`;
+          document.getElementById('result').innerHTML = html;
       }
     </script>
   
