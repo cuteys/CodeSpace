@@ -89,24 +89,18 @@ create_service() {
         # Alpine 使用 openrc 创建服务
         if [ ! -f /etc/init.d/nezha-agent ]; then
             echo "Creating nezha-agent service for Alpine..."
+
+            # 写入 openrc 服务脚本
             cat <<EOF >/etc/init.d/nezha-agent
-#!/bin/sh
-# Start/stop nezha-agent service
-case "\$1" in
-  start)
-    ${NZ_AGENT_BIN} &
-    ;;
-  stop)
-    killall nezha-agent
-    ;;
-  restart)
-    killall nezha-agent
-    ${NZ_AGENT_BIN} &
-    ;;
-  *)
-    echo "Usage: \$0 {start|stop|restart}"
-    exit 1
-esac
+#!/sbin/openrc-run
+supervisor=supervise-daemon
+name="nezha-agent"
+description="哪吒监控 Agent"
+command=${NZ_AGENT_BIN}
+command_args="-c ${NZ_AGENT_PATH}/config.yml"
+name=$(basename \$(readlink -f \$command))
+directory="${NZ_AGENT_PATH}"
+supervise_daemon_args="--stdout /var/log/\${name}.log --stderr /var/log/\${name}.err"
 EOF
             chmod +x /etc/init.d/nezha-agent
             success "Service nezha-agent created for Alpine."
