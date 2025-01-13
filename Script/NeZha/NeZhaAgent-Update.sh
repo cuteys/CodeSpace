@@ -90,8 +90,8 @@ create_service() {
         if [ ! -f /etc/init.d/nezha-agent ]; then
             echo "Creating nezha-agent service for Alpine..."
 
-            # 写入 openrc 服务脚本
-            cat <<EOF >/etc/init.d/nezha-agent
+            # 使用 sudo 权限创建 openrc 服务脚本
+            sudo cat <<EOF >/etc/init.d/nezha-agent
 #!/sbin/openrc-run
 supervisor=supervise-daemon
 name="nezha-agent"
@@ -102,15 +102,16 @@ name=$(basename \$(readlink -f \$command))
 directory="${NZ_AGENT_PATH}"
 supervise_daemon_args="--stdout /var/log/\${name}.log --stderr /var/log/\${name}.err"
 EOF
-            chmod +x /etc/init.d/nezha-agent
+            sudo chmod +x /etc/init.d/nezha-agent
             success "Service nezha-agent created for Alpine."
         fi
-        rc-update add nezha-agent default
+        # 确保服务已经添加到默认运行级别
+        sudo rc-update add nezha-agent default
     else
         # 对于非 Alpine 系统使用 systemd
         if ! systemctl list-unit-files | grep -qw "nezha-agent.service"; then
             echo "Creating nezha-agent service..."
-            cat <<EOF >/etc/systemd/system/nezha-agent.service
+            sudo cat <<EOF >/etc/systemd/system/nezha-agent.service
 [Unit]
 Description=哪吒监控 Agent
 After=network.target
@@ -125,8 +126,8 @@ User=root
 [Install]
 WantedBy=multi-user.target
 EOF
-            systemctl daemon-reload
-            systemctl enable nezha-agent
+            sudo systemctl daemon-reload
+            sudo systemctl enable nezha-agent
             success "Service nezha-agent created and enabled."
         fi
     fi
