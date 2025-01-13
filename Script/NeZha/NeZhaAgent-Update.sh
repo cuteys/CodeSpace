@@ -98,7 +98,7 @@ name="nezha-agent"
 description="哪吒监控 Agent"
 command=${NZ_AGENT_BIN}
 command_args="-c ${NZ_AGENT_PATH}/config.yml"
-name=$(basename \$(readlink -f \$command))
+name=\$(basename \$(readlink -f \${command}))
 directory="${NZ_AGENT_PATH}"
 supervise_daemon_args="--stdout /var/log/\${name}.log --stderr /var/log/\${name}.err"
 EOF
