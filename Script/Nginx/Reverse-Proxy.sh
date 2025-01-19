@@ -14,6 +14,16 @@ get_os() {
     echo "检测到的操作系统是：$OS"
 }
 
+# 检查是否已安装 Nginx，如果没有则进行安装
+check_nginx() {
+    if ! command -v nginx &> /dev/null; then
+        echo "Nginx 未安装，正在安装 Nginx..."
+        install_nginx
+    else
+        echo "Nginx 已安装，跳过安装步骤。"
+    fi
+}
+
 # 安装 Nginx 和相关依赖
 install_nginx() {
     case $OS in
@@ -184,16 +194,21 @@ configure_nginx() {
         CACHE_SETUP=""
     fi
 
-    printf "$REDIRECT_CONFIG\nserver {\n    listen 443 ssl;\n    server_name _;\n\n    $SSL_CONFIG\n\n    location / {\n        proxy_pass $PROTOCOL://$SOURCE_IP\$request_uri;\n\n        proxy_set_header Host \$host;\n        proxy_set_header X-Real-IP \$remote_addr;\n        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto \$scheme;\n\n        proxy_connect_timeout 60;\n        proxy_read_timeout 60;\n$CACHE_CONFIG\n    }\n}\n" > /etc/nginx/conf.d/default.conf
+    printf "$REDIRECT_CONFIG\nserver {\n    listen 443 ssl;\n    server_name _;\n\n    $SSL_CONFIG\n\n    location / {\n        proxy_pass $PROTOCOL://$SOURCE_IP\$request_uri;\n\n        proxy_set_header Host \$host;\n        proxy_set_header X-Real-IP \$remote_addr;\n        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto \$scheme;\n\n        proxy_connect_timeout 60;\n        proxy_read_timeout 60;\n$CACHE_CONFIG\n    }\n}\n" > /etc/nginx/conf.d/proxy.conf
 
     if [ -n "$CACHE_SETUP" ]; then
-        if grep -q "http {" /etc/nginx/nginx.conf; then
-            sed -i "/http {/a $CACHE_SETUP" /etc/nginx/nginx.conf
+        if ! grep -q "proxy_cache_path" /etc/nginx/nginx.conf; then
+            if grep -q "http {" /etc/nginx/nginx.conf; then
+                sed -i "/http {/a $CACHE_SETUP" /etc/nginx/nginx.conf
+            else
+                echo -e "http {\n    $CACHE_SETUP\n}" >> /etc/nginx/nginx.conf
+            fi
         else
-            echo -e "http {\n    $CACHE_SETUP\n}" >> /etc/nginx/nginx.conf
+            echo "proxy_cache_path 配置已存在，跳过添加。"
         fi
     fi
 }
+
 
 # 测试 Nginx 配置
 test_nginx_config() {
@@ -222,7 +237,7 @@ reload_nginx() {
 # 主流程
 check_root
 get_os
-install_nginx
+check_nginx
 create_cert_dir
 get_source_ip
 get_https_preference
