@@ -194,8 +194,10 @@ configure_nginx() {
         CACHE_SETUP=""
     fi
 
+    # 写入 Nginx 配置文件
     printf "$REDIRECT_CONFIG\nserver {\n    listen 443 ssl;\n    server_name _;\n\n    $SSL_CONFIG\n\n    location / {\n        proxy_pass $PROTOCOL://$SOURCE_IP\$request_uri;\n\n        proxy_set_header Host \$host;\n        proxy_set_header X-Real-IP \$remote_addr;\n        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto \$scheme;\n\n        proxy_connect_timeout 60;\n        proxy_read_timeout 60;\n$CACHE_CONFIG\n    }\n}\n" > /etc/nginx/conf.d/proxy.conf
 
+    # 写入缓存配置
     if [ -n "$CACHE_SETUP" ]; then
         if ! grep -q "proxy_cache_path" /etc/nginx/nginx.conf; then
             if grep -q "http {" /etc/nginx/nginx.conf; then
@@ -209,6 +211,32 @@ configure_nginx() {
     fi
 }
 
+# 创建 /var/www/html/index.html 以重定向到 HTTPS
+create_https_redirect_page() {
+    if [ "$USE_HTTPS" = "true" ]; then
+        echo "正在创建 HTTPS 重定向页面..."
+        cat > /var/www/html/index.html <<EOF
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正在重定向...</title>
+    <script type="text/javascript">
+        if (window.location.protocol === 'http:') {
+            var httpsLink = 'https://' + window.location.host + window.location.pathname + window.location.search;
+            window.location.href = httpsLink;
+        }
+    </script>
+</head>
+<body>
+    <h1>正在将您重定向到安全的 HTTPS 网站...</h1>
+    <p>如果没有自动跳转，请点击以下链接访问 <a href="https://\${window.location.host}\${window.location.pathname}">HTTPS 网站</a></p>
+</body>
+</html>
+EOF
+    fi
+}
 
 # 测试 Nginx 配置
 test_nginx_config() {
@@ -245,6 +273,7 @@ get_reverse_proxy_https
 get_cert_input
 get_cache_preference
 configure_nginx
+create_https_redirect_page
 test_nginx_config
 reload_nginx
 
