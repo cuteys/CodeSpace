@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>智能跳转</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+      color: #1d1d1f;
+      overflow-x: hidden;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      html, body {
+        background: linear-gradient(135deg, #2e335a 0%, #1c1c1e 100%);
+        color: #f5f5f7;
+      }
+    }
+
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .main-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .main-card {
+        background: rgba(40, 40, 50, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+      border-radius: 15px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #003366;
+      box-shadow: 0 8px 20px rgba(102, 166, 255, 0.4);
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #555a60;
+      margin-bottom: 30px;
+      line-height: 1.4;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .subtitle { color: #a0a0a5; }
+    }
+
+    .button {
+      display: inline-block;
+      padding: 16px 32px;
+      font-size: 17px;
+      font-weight: 600;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6a85f1, #89f7fe);
+      color: white;
+      text-decoration: none;
+      user-select: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      min-width: 200px;
+      box-shadow: 0 8px 20px rgba(106, 133, 241, 0.3);
+    }
+    .button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(106, 133, 241, 0.4);
+    }
+
+    .button:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 4px 15px rgba(106, 133, 241, 0.3);
+    }
+
+    .button.manual-import, .button.edit-mode {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      box-shadow: 0 8px 20px rgba(67, 233, 123, 0.3);
+    }
+
+    .tutorial-card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      max-width: 400px;
+      width: 100%;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .tutorial-card {
+        background: rgba(44, 44, 54, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+    }
+
+    .tutorial-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .tutorial-content {
+      font-size: 14px;
+      color: #555a60;
+      line-height: 1.5;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .tutorial-content { color: #a0a0a5; }
+    }
+
+    .tutorial-step {
+      margin-bottom: 8px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .tutorial-step::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #66a6ff;
+      font-weight: bold;
+    }
+
+    .footer {
+      padding: 20px;
+      text-align: center;
+      font-size: 15px;
+      color: #333;
+      width: 100%;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .footer { color: rgba(255, 255, 255, 0.8); }
+    }
+
+    .footer a {
+      color: #d18ce0;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .fade-in { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .scale-in { animation: scaleIn 0.4s ease-out; }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      padding: 15px;
+    }
+
+    .modal-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 500px;
+      max-height: 85vh;
+      overflow-y: auto;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .modal-content::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .modal-overlay.visible .modal-content {
+      transform: scale(1);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .modal-content {
+        background: rgba(40, 40, 50, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .line-item, .auth-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+
+    .line-item input, .auth-item input {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #f0f0f0;
+      color: #333;
+      min-width: 0;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      .line-item input, .auth-item input {
+        background: #2c2c2e;
+        border-color: #444;
+        color: #f5f5f7;
+      }
+    }
+
+    .remove-line-btn {
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      background: #ff5c5c;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .remove-line-btn:hover { background: #ff3b3b; }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 10px;
+      margin-top: 25px;
+    }
+    
+    .modal-actions .button {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 8px;
+      font-size: 15px;
+    }
+    
+    @media (max-width: 380px) {
+      .modal-actions {
+        flex-direction: column;
+      }
+    }
+    
+    #add-line-btn {
+      background: linear-gradient(135deg, #6c757d, #868e96);
+    }
+    #copy-link-btn {
+      background: linear-gradient(135deg, #f7b733, #fc4a1a);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main-card fade-in">
+      <div class="icon">🔗</div>
+      <h1 class="title">智能跳转</h1>
+      <p class="subtitle">正在为您准备跳转链接...</p>
+      <a id="action-button" class="button" href="#">点击跳转</a>
+    </div>
+
+    <div class="tutorial-card scale-in">
+      <h2 class="tutorial-title">📖 使用教程</h2>
+      <div class="tutorial-content">
+        <div class="tutorial-step">🔗 在网址后添加 #目标链接，即可自动跳转</div>
+        <div class="tutorial-step">📌 如 gocy.pages.dev/#tg://msg?text=🤡</div>
+		    <div class="tutorial-step">⚠️ 若点击无反应，请确认已安装对应的应用</div>
+		    <div class="tutorial-step">📝 可手动添加线路自动一键导入至 Forward</div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      © <span id="year"></span> By <a href="https://t.me/ChuiYansBot" target="_blank" rel="noopener noreferrer">ChuiYans</a>
+    </div>
+  </div>
+
+  <div id="import-modal" class="modal-overlay">
+    <div class="modal-content">
+      <h2 class="modal-title">一键导入至 Forward</h2>
+      <div id="auth-container">
+        <div class="auth-item">
+          <input type="text" id="username-input" placeholder="用户名 (可选)">
+        </div>
+        <div class="auth-item">
+          <input type="password" id="password-input" placeholder="密码 (可选)">
+        </div>
+      </div>
+      <hr style="margin: 20px 0; border-color: rgba(0,0,0,0.1); border-style: solid; border-width: 0.5px 0 0 0;">
+      <div id="lines-container">
+      </div>
+      <div class="modal-actions">
+        <button id="add-line-btn" class="button">添加线路</button>
+        <button id="copy-link-btn" class="button">复制链接</button>
+        <button id="generate-link-btn" class="button">生成并跳转</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    
+    let actionButton; 
+  
+    document.addEventListener('DOMContentLoaded', function() {
+      actionButton = document.getElementById('action-button');
+      initializeRedirect();
+      setupModal();
+    });
+
+    function openModal() {
+      document.getElementById('import-modal').classList.add('visible');
+    }
+
+    function initializeRedirect() {
+      let rawTarget = '';
+      const fullHref = location.href;
+      const hashIndex = fullHref.indexOf('#');
+
+      if (hashIndex !== -1) {
+        rawTarget = fullHref.substring(hashIndex + 1);
+      } else {
+        const encodedHashIndex = fullHref.indexOf('%23');
+        if (encodedHashIndex !== -1) {
+          rawTarget = fullHref.substring(encodedHashIndex + 3);
+        }
+      }
+
+      const target = decodeURIComponent(rawTarget);
+
+      if (target && target.includes("://")) {
+        actionButton.href = target;
+        actionButton.innerHTML = '点击跳转';
+        document.querySelector('.title').textContent = '准备就绪';
+        document.querySelector('.subtitle').textContent = '已解析目标地址，即将自动跳转...';
+        setTimeout(() => {
+          window.location.href = actionButton.href;
+        }, 1500);
+      } else {
+        actionButton.innerHTML = '手动导入';
+        actionButton.removeAttribute('href');
+        actionButton.className = 'button manual-import';
+        document.querySelector('.title').textContent = '未提供参数';
+        document.querySelector('.subtitle').textContent = 'URL中未找到有效跳转地址，请手动导入';
+        document.querySelector('.icon').textContent = '✍️';
+        
+        actionButton.addEventListener('click', openModal);
+      }
+    }
+
+    function setupModal() {
+      const modal = document.getElementById('import-modal');
+      const linesContainer = document.getElementById('lines-container');
+      const addLineBtn = document.getElementById('add-line-btn');
+      const generateBtn = document.getElementById('generate-link-btn');
+      const copyBtn = document.getElementById('copy-link-btn');
+      const usernameInput = document.getElementById('username-input');
+      const passwordInput = document.getElementById('password-input');
+
+      const createLineItem = (name = '', address = '') => {
+        const div = document.createElement('div');
+        div.className = 'line-item';
+        div.innerHTML = `
+          <input type="text" class="line-name" placeholder="线路名称 (如: 主线路)" value="${name}">
+          <input type="text" class="line-address" placeholder="线路地址 (如: https://...)" value="${address}">
+          <button class="remove-line-btn">×</button>
+        `;
+        linesContainer.appendChild(div);
+        div.querySelector('.remove-line-btn').addEventListener('click', () => div.remove());
+      };
+
+      createLineItem('', '');
+
+      addLineBtn.addEventListener('click', () => createLineItem());
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('visible');
+        }
+      });
+
+      function generateImportUrl() {
+        const items = linesContainer.querySelectorAll('.line-item');
+        if (items.length === 0) {
+          alert('请至少添加一条线路！');
+          return null;
+        }
+
+        const lines = Array.from(items).map(item => ({
+          name: item.querySelector('.line-name').value.trim(),
+          address: item.querySelector('.line-address').value.trim()
+        })).filter(line => line.name && line.address);
+
+        if (lines.length === 0) {
+          alert('请输入有效的线路名称和地址！');
+          return null;
+        }
+
+        try {
+          const mainLine = new URL(lines[0].address);
+          const scheme = mainLine.protocol.slice(0, -1);
+          const host = mainLine.hostname;
+          const port = mainLine.port || (scheme === 'https' ? '443' : '80' );
+          const title = encodeURIComponent(lines[0].name);
+          const username = encodeURIComponent(usernameInput.value.trim());
+          const password = encodeURIComponent(passwordInput.value.trim());
+
+          let importUrl = `forward://import?type=emby&scheme=${scheme}&host=${host}&port=${port}&username=${username}&password=${password}&title=${title}`;
+
+          if (lines.length > 1) {
+            for (let i = 1; i < lines.length; i++) {
+              const subLine = new URL(lines[i].address);
+              const subPort = subLine.port || (subLine.protocol === 'https:' ? '443' : '80' );
+              const subUrl = `${subLine.protocol}//${subLine.hostname}:${subPort}`;
+              const subTitle = encodeURIComponent(lines[i].name);
+              importUrl += `&line${i}=${encodeURIComponent(subUrl)}&line${i}title=${subTitle}`;
+            }
+          }
+          return importUrl;
+        } catch (error) {
+          alert('线路地址格式错误，请输入完整的URL (例如: https://example.com)');
+          console.error("URL parsing error:", error);
+          return null;
+        }
+      }
+
+      copyBtn.addEventListener('click', async () => {
+        const originalText = copyBtn.textContent;
+        copyBtn.disabled = true;
+        copyBtn.textContent = '正在复制...';
+
+        const forwardUrl = generateImportUrl();
+        
+        if (forwardUrl) {
+          const shareableUrl = `https://gocy.pages.dev/#${encodeURIComponent(forwardUrl )}`;
+          try {
+            await navigator.clipboard.writeText(shareableUrl);
+            copyBtn.textContent = '已复制!';
+          } catch (err) {
+            copyBtn.textContent = '复制失败';
+            alert('复制失败，请检查浏览器权限或手动复制。');
+            console.error('Copy failed:', err);
+          }
+        } else {
+          copyBtn.textContent = originalText;
+        }
+
+        setTimeout(() => {
+          copyBtn.disabled = false;
+          copyBtn.textContent = originalText;
+        }, 2000);
+      });
+
+      generateBtn.addEventListener('click', () => {
+        const importUrl = generateImportUrl();
+        if (importUrl) {
+          actionButton.removeEventListener('click', openModal);
+          
+          document.querySelector('.title').textContent = '生成成功';
+          document.querySelector('.subtitle').textContent = '已生成导入链接，即将跳转...';
+          document.querySelector('.icon').textContent = '✅';
+          
+          actionButton.innerHTML = '编辑线路';
+          actionButton.removeAttribute('href');
+          actionButton.className = 'button edit-mode';
+          actionButton.addEventListener('click', openModal);
+
+          modal.classList.remove('visible');
+
+          setTimeout(() => {
+            window.location.href = importUrl;
+          }, 1500);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
